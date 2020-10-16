@@ -6,3 +6,6 @@
 # а внизу виден результат выполнения этого файла.
 
 # TODO здесь поместите ссылку на скриншот
+
+Ссылка на скриншот:
+https://lh3.googleusercontent.com/pw/ACtC-3fWM3zuMfH-14jf4aJ5jRYQ3vCG-8DkUhXTsL2g-2oidRmAx-LhMi1MkXgq_pmJ5LC1oAGxEO_8YUnWJAgZN-9ezULz-u9_1onpukue8JQodR4ZwBo0uBlH3RHQdrm7XpfufOUcqfQRwfhwFkGv3wFeyA=w1400-h1000-no
