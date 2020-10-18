@@ -8,18 +8,21 @@ garden = ('ромашка', 'роза', 'одуванчик', 'ромашка', 
 meadow = ('клевер', 'одуванчик', 'ромашка', 'клевер', 'мак', 'одуванчик', 'ромашка')
 
 # создайте множество цветов, произрастающих в саду и на лугу
-# garden_set =
-# meadow_set =
-# TODO здесь ваш код
+garden_set = set(garden)
+meadow_set = set(meadow)
 
 # выведите на консоль все виды цветов
-# TODO здесь ваш код
+all_flowers_set = set(garden_set | meadow_set)
+print(all_flowers_set)
 
 # выведите на консоль те, которые растут и там и там
-# TODO здесь ваш код
+cross_flowers_set = set(garden_set & meadow_set)
+print(cross_flowers_set)
 
 # выведите на консоль те, которые растут в саду, но не растут на лугу
-# TODO здесь ваш код
+exclusive_garden_flowers = set(garden_set - meadow_set)
+print(exclusive_garden_flowers)
 
 # выведите на консоль те, которые растут на лугу, но не растут в саду
-# TODO здесь ваш код
+exclusive_meadow_flowers = set(meadow_set - garden_set)
+print(exclusive_meadow_flowers)
