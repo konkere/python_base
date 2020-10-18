@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from pprint import pprint
+
 # Есть словарь координат городов
 
 sites = {
@@ -14,6 +16,20 @@ sites = {
 
 distances = {}
 
-# TODO здесь заполнение словаря
+# Создаём переменные координат каждого города, X и Y, для облегчения читабельности
+moscow_x, moscow_y = sites['Moscow'][0], sites['Moscow'][1]
+london_x, london_y = sites['London'][0], sites['London'][1]
+paris_x, paris_y = sites['Paris'][0], sites['Paris'][1]
 
-print(distances)
+# Вычисляем расстояния между городами в обе (не обязательно, но на случай пополнения кода в будущем) стороны
+moscow2london = london2moscow = ((moscow_x - london_x) ** 2 + (moscow_y - london_y) ** 2) ** 0.5
+moscow2paris = paris2moscow = ((moscow_x - paris_x) ** 2 + (moscow_y - paris_y) ** 2) ** 0.5
+paris2london = london2paris = ((paris_x - london_x) ** 2 + (paris_y - london_y) ** 2) ** 0.5
+
+# Пополняем словарь расстояний между городами
+distances['Moscow - London'] = distances['London - Moscow'] = moscow2london
+distances['Moscow - Paris'] = distances['Paris - Moscow'] = moscow2paris
+distances['Paris - London'] = distances['London - Paris'] = paris2london
+
+# Смотрим вывод всего словаря с расстояниями
+pprint(distances)
