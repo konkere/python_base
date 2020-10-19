@@ -26,3 +26,5 @@ print(exclusive_garden_flowers)
 # выведите на консоль те, которые растут на лугу, но не растут в саду
 exclusive_meadow_flowers = set(meadow_set - garden_set)
 print(exclusive_meadow_flowers)
+
+# зачет!
