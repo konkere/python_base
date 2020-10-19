@@ -27,15 +27,10 @@ moscow2paris = paris2moscow = ((moscow_x - paris_x) ** 2 + (moscow_y - paris_y) 
 paris2london = london2paris = ((paris_x - london_x) ** 2 + (paris_y - london_y) ** 2) ** 0.5
 
 # Пополняем словарь расстояний между городами
-distances['Moscow - London'] = distances['London - Moscow'] = moscow2london
-distances['Moscow - Paris'] = distances['Paris - Moscow'] = moscow2paris
-distances['Paris - London'] = distances['London - Paris'] = paris2london
-# TODO по заданию должна получится вот такая структура словаря!
-# TODO {
-#  'Moscow': {'London': значение, 'Paris': значение},
-#  'London': {'Moscow': значение, 'Paris': значение},
-#  'Paris': {'Moscow': значение, 'London': значение},
-#  }
+distances = {'Moscow': {'London': moscow2london, 'Paris': moscow2paris},
+             'London': {'Moscow': london2moscow, 'Paris': london2paris},
+             'Paris': {'Moscow': paris2moscow, 'London': paris2london}
+             }
 
 # Смотрим вывод всего словаря с расстояниями
 pprint(distances)
