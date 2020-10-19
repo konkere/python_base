@@ -30,6 +30,12 @@ paris2london = london2paris = ((paris_x - london_x) ** 2 + (paris_y - london_y) 
 distances['Moscow - London'] = distances['London - Moscow'] = moscow2london
 distances['Moscow - Paris'] = distances['Paris - Moscow'] = moscow2paris
 distances['Paris - London'] = distances['London - Paris'] = paris2london
+# TODO по заданию должна получится вот такая структура словаря!
+# TODO {
+#  'Moscow': {'London': значение, 'Paris': значение},
+#  'London': {'Moscow': значение, 'Paris': значение},
+#  'Paris': {'Moscow': значение, 'London': значение},
+#  }
 
 # Смотрим вывод всего словаря с расстояниями
 pprint(distances)

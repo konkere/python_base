@@ -19,8 +19,15 @@ film_1 = my_favorite_movies[:10]
 film_2 = my_favorite_movies[12:25]
 film_3 = my_favorite_movies[27:33]
 film_4 = my_favorite_movies[35:40]
-film_5 = my_favorite_movies[42:]
+# Есть вариант взять с конца строки отрицательным индексом [-15:]
+film_5 = my_favorite_movies[-15:]
 
+# TODO list - зарезервированное слово использовать его в названии переменных не рекомендуется
+# TODO так же как dict tuple set и тд. подробнее в FAQ, в нашем случае в список не нужен!
 film_list = [film_1, film_2, film_3, film_4, film_5]
 
+# TODO стараемся конкатенацию строк в принте не использовать, либо через (,)
+# TODO самый новый формат для печати в принт это f - строки или более ранний .format()
+# TODO Если записать через (,) то:
+# TODO для того чтобы распечатать в столбик, можно воспользоваться аргументом sep и туда передать '\n'
 print(film_list[0] + '\n' + film_list[-1] + '\n' + film_list[1] + '\n' + film_list[-2])

@@ -42,6 +42,9 @@ pocket_universe_songs = {
 # Распечатайте общее время звучания трех песен: 'On Track', 'To the Sea' и 'Beyond Mirrors'
 #   А другие три песни звучат приблизительно ХХХ минут
 
+# TODO используем только round нужно поиграться с параметрами!
+# TODO Для переноса не используйте знак \, а лучше все всзять в () и перенести по математическому знаку,
+#  или другому символу
 three_songs_y = int(round(pocket_universe_songs['On Track'] + pocket_universe_songs['To the Sea'] + pocket_universe_songs['Beyond Mirrors'], 0))
 print('А другие три песни звучат приблизительно', three_songs_y, 'минут')
 
