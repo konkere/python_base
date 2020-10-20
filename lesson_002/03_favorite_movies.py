@@ -38,3 +38,5 @@ print(f"""Вариант с f:
 {film_4}
 """)
 print('Вариант с sep:', film_1, film_5, film_2, film_4, sep='\n')
+
+# зачет!
