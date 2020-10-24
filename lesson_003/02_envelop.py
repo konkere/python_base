@@ -10,6 +10,8 @@
 # Результат проверки вывести на консоль (ДА/НЕТ)
 # Использовать только операторы if/elif/else, можно вложенные
 
+from pprint import pprint
+
 envelop_x, envelop_y = 10, 7
 paper_x, paper_y = 8, 9
 # проверить для
@@ -21,7 +23,11 @@ paper_x, paper_y = 8, 9
 # paper_x, paper_y = 9, 11
 # (просто раскоментировать нужную строку и проверить свой код)
 
-# TODO здесь ваш код
+if (envelop_x >= paper_x and envelop_y >= paper_y) or \
+        (envelop_x >= paper_y and envelop_y >= paper_x):
+    print('ДА')
+else:
+    print('НЕТ')
 
 # Усложненное задание, решать по желанию.
 # Заданы размеры hole_x, hole_y прямоугольного отверстия и размеры brick_х, brick_у, brick_z кирпича (все размеры
@@ -29,7 +35,7 @@ paper_x, paper_y = 8, 9
 #
 # Определить, пройдет ли кирпич через отверстие (грани кирпича параллельны сторонам отверстия)
 
-# hole_x, hole_y = 8, 9
+hole_x, hole_y = 8, 9
 # brick_x, brick_y, brick_z = 11, 10, 2
 # brick_x, brick_y, brick_z = 11, 2, 10
 # brick_x, brick_y, brick_z = 10, 11, 2
@@ -50,4 +56,19 @@ paper_x, paper_y = 8, 9
 # brick_x, brick_y, brick_z = 3, 11, 6
 # (просто раскоментировать нужную строку и проверить свой код)
 
-# TODO здесь ваш код
+bricks_in_hole = {}
+#           \/ можно как в задании поставить диапазон до 1000, но лучше этого не делать
+brick_max = 100
+for brick_x in range(1, brick_max + 1):
+    for brick_y in range(1, brick_max + 1):
+        for brick_z in range(1, brick_max + 1):
+            if (hole_x >= brick_x and hole_y >= brick_y) or \
+                    (hole_x >= brick_y and hole_y >= brick_x) or \
+                    (hole_x >= brick_x and hole_y >= brick_z) or \
+                    (hole_x >= brick_z and hole_y >= brick_x) or \
+                    (hole_x >= brick_y and hole_y >= brick_z) or \
+                    (hole_x >= brick_z and hole_y >= brick_y):
+                bricks_in_hole[(brick_x, brick_y, brick_z)] = 'ДА'
+            else:
+                bricks_in_hole[(brick_x, brick_y, brick_z)] = 'НЕТ'
+pprint(bricks_in_hole)
