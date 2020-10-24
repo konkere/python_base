@@ -8,7 +8,17 @@
 
 # Номер месяца получать от пользователя следующим образом
 user_input = input('Введите, пожалуйста, номер месяца: ')
-month = int(user_input)
-print('Вы ввели', month)
+days_in_month = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
 
-# TODO здесь ваш код
+if user_input.isdecimal():
+    month = int(user_input)
+    print('Вы ввели', month)
+    if 0 < month < 13:
+        month += -1
+        print('Количество дней в этом месяце -', days_in_month[month])
+    else:
+        print('В календаре нет такого месяца.')
+elif user_input == '':
+    print('Вы забыли ввести номер месяца.')
+else:
+    print('Вы ввели не номер.')
