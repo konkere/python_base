@@ -11,4 +11,11 @@
 
 a, b = 179, 37
 
-# TODO здесь ваш код
+b_in_a = 0
+temp_a = a
+
+while temp_a >= b:
+    temp_a -= b
+    b_in_a += 1
+
+print('Целочисленное деление', a, 'на', b, 'даёт', b_in_a)
