@@ -54,4 +54,16 @@ store = {
 #         подсчет стоимости товара
 #     вывод на консоль количества и стоимости товара на складе
 
-# TODO здесь ваш код
+def quantity_and_cost(name_of_goods):
+    goods_positions = len(store[goods[name_of_goods]])
+    goods_quantity, goods_cost = 0, 0
+    for i in range(goods_positions):
+        goods_quantity += store[goods[name_of_goods]][i]['quantity']
+        goods_cost += store[goods[name_of_goods]][i]['price'] * store[goods[name_of_goods]][i]['quantity']
+    return goods_quantity, goods_cost
+
+
+print('Лампа -', quantity_and_cost('Лампа')[0], 'шт., стоимость', quantity_and_cost('Лампа')[1], 'руб.')
+print('Стол -', quantity_and_cost('Стол')[0], 'шт., стоимость', quantity_and_cost('Стол')[1], 'руб.')
+print('Диван -', quantity_and_cost('Диван')[0], 'шт., стоимость', quantity_and_cost('Диван')[1], 'руб.')
+print('Стул -', quantity_and_cost('Стул')[0], 'шт., стоимость', quantity_and_cost('Стул')[1], 'руб.')
