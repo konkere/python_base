@@ -54,6 +54,7 @@ store = {
 #         подсчет стоимости товара
 #     вывод на консоль количества и стоимости товара на складе
 
+
 def quantity_and_cost(name_of_goods):
     goods_positions = len(store[goods[name_of_goods]])
     goods_quantity, goods_cost = 0, 0
