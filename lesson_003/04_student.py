@@ -21,3 +21,5 @@ while month_in_education < 10:
 
 request_funds = round(request_funds, 2)
 print('Студенту надо попросить', request_funds, 'рублей')
+
+# зачет!
