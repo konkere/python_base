@@ -54,3 +54,5 @@ for _ in range(100):
     draw_buble(point=point, step=step, color=sd.random_color())
 
 sd.pause()
+
+# зачет!

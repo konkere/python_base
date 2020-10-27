@@ -23,11 +23,20 @@ paper_x, paper_y = 8, 9
 # paper_x, paper_y = 9, 11
 # (просто раскоментировать нужную строку и проверить свой код)
 
+# TODO символ \ лучше использовать для переноса PEP8
 if (envelop_x >= paper_x and envelop_y >= paper_y) or \
         (envelop_x >= paper_y and envelop_y >= paper_x):
     print('ДА')
 else:
     print('НЕТ')
+
+# TODO Подсказка: итоговый вариант должен выглядеть так:
+# TODO      if ... and ...:
+# TODO          ...
+# TODO      elif ... and ...:
+# TODO          ...
+# TODO      else:
+# TODO          ...
 
 # Усложненное задание, решать по желанию.
 # Заданы размеры hole_x, hole_y прямоугольного отверстия и размеры brick_х, brick_у, brick_z кирпича (все размеры
@@ -55,6 +64,22 @@ hole_x, hole_y = 8, 9
 # brick_x, brick_y, brick_z = 3, 6, 11
 # brick_x, brick_y, brick_z = 3, 11, 6
 # (просто раскоментировать нужную строку и проверить свой код)
+
+# TODO Подсказка: итоговый вариант должен выглядеть так:
+# TODO      if ... and ...:
+# TODO          ...
+# TODO      elif ... and ...:
+# TODO          ...
+# TODO      elif ... and ...:
+# TODO          ...
+# TODO      elif ... and ...:
+# TODO          ...
+# TODO      elif ... and ...:
+# TODO          ...
+# TODO      elif ... and ...:
+# TODO          ...
+# TODO      else:
+# TODO          ...
 
 bricks_in_hole = {}
 #           \/ можно как в задании поставить диапазон до 1000, но лучше этого не делать

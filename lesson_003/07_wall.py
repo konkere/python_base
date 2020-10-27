@@ -9,8 +9,10 @@ import simple_draw
 resolution_x, resolution_y = 1200, 800
 simple_draw.resolution = (resolution_x, resolution_y)
 brick_width, brick_height = 100, 50
+# TODO чтобы не заводить новую переменную получим ее в заголовке цикла
 shift_y = 0
-
+# TODO для получения номера строки и Y используйте enumerate(range(0, 551, 50)), и сразу делайте распаковку
+# TODO в цикле мы сразу получим две переменные номер строки и сам Y
 for y in range(0, resolution_y, brick_height):
     shift_y += 1
     x = 0
