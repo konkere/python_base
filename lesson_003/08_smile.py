@@ -30,8 +30,7 @@ def smile(x, y, color):
     simple_draw.line(smile_mouth_point1, smile_mouth_point2, color, 3)
 
 
-# TODO если переменная не используется то заменим ее на _
-for i in range(10):
+for _ in range(10):
     smile(random.randint(50, resolution_x - 50), random.randint(50, resolution_y - 50), simple_draw.random_color())
 
 simple_draw.pause()

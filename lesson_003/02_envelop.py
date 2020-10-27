@@ -24,19 +24,12 @@ paper_x, paper_y = 8, 9
 # (просто раскоментировать нужную строку и проверить свой код)
 
 # TODO символ \ лучше использовать для переноса PEP8
-if (envelop_x >= paper_x and envelop_y >= paper_y) or \
-        (envelop_x >= paper_y and envelop_y >= paper_x):
+if envelop_x >= paper_x and envelop_y >= paper_y:
+    print('ДА')
+elif envelop_x >= paper_y and envelop_y >= paper_x:
     print('ДА')
 else:
     print('НЕТ')
-
-# TODO Подсказка: итоговый вариант должен выглядеть так:
-# TODO      if ... and ...:
-# TODO          ...
-# TODO      elif ... and ...:
-# TODO          ...
-# TODO      else:
-# TODO          ...
 
 # Усложненное задание, решать по желанию.
 # Заданы размеры hole_x, hole_y прямоугольного отверстия и размеры brick_х, brick_у, brick_z кирпича (все размеры
@@ -65,34 +58,23 @@ hole_x, hole_y = 8, 9
 # brick_x, brick_y, brick_z = 3, 11, 6
 # (просто раскоментировать нужную строку и проверить свой код)
 
-# TODO Подсказка: итоговый вариант должен выглядеть так:
-# TODO      if ... and ...:
-# TODO          ...
-# TODO      elif ... and ...:
-# TODO          ...
-# TODO      elif ... and ...:
-# TODO          ...
-# TODO      elif ... and ...:
-# TODO          ...
-# TODO      elif ... and ...:
-# TODO          ...
-# TODO      elif ... and ...:
-# TODO          ...
-# TODO      else:
-# TODO          ...
-
 bricks_in_hole = {}
 #           \/ можно как в задании поставить диапазон до 1000, но лучше этого не делать
 brick_max = 100
 for brick_x in range(1, brick_max + 1):
     for brick_y in range(1, brick_max + 1):
         for brick_z in range(1, brick_max + 1):
-            if (hole_x >= brick_x and hole_y >= brick_y) or \
-                    (hole_x >= brick_y and hole_y >= brick_x) or \
-                    (hole_x >= brick_x and hole_y >= brick_z) or \
-                    (hole_x >= brick_z and hole_y >= brick_x) or \
-                    (hole_x >= brick_y and hole_y >= brick_z) or \
-                    (hole_x >= brick_z and hole_y >= brick_y):
+            if hole_x >= brick_x and hole_y >= brick_y:
+                bricks_in_hole[(brick_x, brick_y, brick_z)] = 'ДА'
+            elif hole_x >= brick_y and hole_y >= brick_x:
+                bricks_in_hole[(brick_x, brick_y, brick_z)] = 'ДА'
+            elif hole_x >= brick_x and hole_y >= brick_z:
+                bricks_in_hole[(brick_x, brick_y, brick_z)] = 'ДА'
+            elif hole_x >= brick_z and hole_y >= brick_x:
+                bricks_in_hole[(brick_x, brick_y, brick_z)] = 'ДА'
+            elif hole_x >= brick_y and hole_y >= brick_z:
+                bricks_in_hole[(brick_x, brick_y, brick_z)] = 'ДА'
+            elif hole_x >= brick_z and hole_y >= brick_y:
                 bricks_in_hole[(brick_x, brick_y, brick_z)] = 'ДА'
             else:
                 bricks_in_hole[(brick_x, brick_y, brick_z)] = 'НЕТ'

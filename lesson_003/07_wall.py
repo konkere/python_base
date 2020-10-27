@@ -6,15 +6,12 @@ import simple_draw
 # Нарисовать стену из кирпичей. Размер кирпича - 100х50
 # Использовать вложенные циклы for
 
+simple_draw.background_color = (178, 34, 34)
 resolution_x, resolution_y = 1200, 800
 simple_draw.resolution = (resolution_x, resolution_y)
 brick_width, brick_height = 100, 50
-# TODO чтобы не заводить новую переменную получим ее в заголовке цикла
-shift_y = 0
-# TODO для получения номера строки и Y используйте enumerate(range(0, 551, 50)), и сразу делайте распаковку
-# TODO в цикле мы сразу получим две переменные номер строки и сам Y
-for y in range(0, resolution_y, brick_height):
-    shift_y += 1
+
+for shift_y, y in enumerate(range(0, resolution_y, brick_height)):
     x = 0
 
     if shift_y % 2 == 0:
@@ -25,7 +22,7 @@ for y in range(0, resolution_y, brick_height):
     for x in range(shift_x, resolution_x, brick_width):
         brick_point_left_bottom = simple_draw.get_point(x, y)
         brick_point_right_top = simple_draw.get_point(x + brick_width, y + brick_height)
-        simple_draw.rectangle(brick_point_left_bottom, brick_point_right_top, simple_draw.COLOR_RED, 1)
+        simple_draw.rectangle(brick_point_left_bottom, brick_point_right_top, simple_draw.COLOR_WHITE, 1)
 
 # Подсказки:
 #  Для отрисовки кирпича использовать функцию rectangle

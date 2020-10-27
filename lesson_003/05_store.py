@@ -54,29 +54,12 @@ store = {
 #         подсчет стоимости товара
 #     вывод на консоль количества и стоимости товара на складе
 
+# Да, что-то у меня какой-то костыль был XD
 
-# TODO Алгоритм примерно должен быть таким.
-# TODO Заводим цикл и в нем сразу получаем имя_продукта и номер_продукта используя .items() у словаря.
-# TODO Объявляем две переменные в которых будем накапливать(считать) данные. Просто присвоим их 0.
-# TODO Это общая стоимость и общее количество товара на складах, так и назовите их.
-# TODO Заводим второй цикл и в нем будем получать словарь параметры_продукта из словаря store по ключу полученному
-# TODO в первом цикле.
-# TODO Во втором цикле накапливаем значения по количеству продукта и его общей стоимости за весь продукт.
-# TODO За одну итерацию умножим количество на стоимость, сложим это в переменную и за вторую итерацию сделаем тоже самое и так # TODO далее.
-# TODO В конце первого фора сделам принт чтобы вывести полученные значения.
-
-# TODO поработайте над неймингом переменных!
-
-def quantity_and_cost(name_of_goods):
-    goods_positions = len(store[goods[name_of_goods]])
-    goods_quantity, goods_cost = 0, 0
-    for i in range(goods_positions):
-        goods_quantity += store[goods[name_of_goods]][i]['quantity']
-        goods_cost += store[goods[name_of_goods]][i]['price'] * store[goods[name_of_goods]][i]['quantity']
-    return goods_quantity, goods_cost
-
-# TODO принт должен быть один
-print('Лампа -', quantity_and_cost('Лампа')[0], 'шт., стоимость', quantity_and_cost('Лампа')[1], 'руб.')
-print('Стол -', quantity_and_cost('Стол')[0], 'шт., стоимость', quantity_and_cost('Стол')[1], 'руб.')
-print('Диван -', quantity_and_cost('Диван')[0], 'шт., стоимость', quantity_and_cost('Диван')[1], 'руб.')
-print('Стул -', quantity_and_cost('Стул')[0], 'шт., стоимость', quantity_and_cost('Стул')[1], 'руб.')
+for product_name, product_code in goods.items():
+    product_quantity, product_cost = 0, 0
+    product_positions = len(store[product_code])
+    for i in range(product_positions):
+        product_quantity += store[product_code][i]['quantity']
+        product_cost += store[product_code][i]['price'] * store[product_code][i]['quantity']
+    print(product_name, '-', product_quantity, 'шт., стоимость', product_cost, 'руб.')
