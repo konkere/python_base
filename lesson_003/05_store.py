@@ -58,9 +58,7 @@ store = {
 
 for product_name, product_code in goods.items():
     product_quantity, product_cost = 0, 0
-    product_positions = len(store[product_code])
-    # TODO тут мы сможем сразу получать словарь, параметры_продукта итерируюсь сразу по store[product_code]
-    for i in range(product_positions):
-        product_quantity += store[product_code][i]['quantity']
-        product_cost += store[product_code][i]['price'] * store[product_code][i]['quantity']
+    for i in store[product_code]:
+        product_quantity += i['quantity']
+        product_cost += i['price'] * i['quantity']
     print(product_name, '-', product_quantity, 'шт., стоимость', product_cost, 'руб.')

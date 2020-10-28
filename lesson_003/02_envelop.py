@@ -23,7 +23,6 @@ paper_x, paper_y = 8, 9
 # paper_x, paper_y = 9, 11
 # (просто раскоментировать нужную строку и проверить свой код)
 
-# TODO символ \ лучше использовать для переноса PEP8
 if envelop_x >= paper_x and envelop_y >= paper_y:
     print('ДА')
 elif envelop_x >= paper_y and envelop_y >= paper_x:
