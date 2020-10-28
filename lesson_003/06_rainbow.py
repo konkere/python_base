@@ -18,6 +18,7 @@ point_end_x, point_end_y = 350, 450
 point_start = sd.get_point(point_start_x, point_start_y)
 point_end = sd.get_point(point_end_x, point_end_y)
 
+# TODO нейминг, переменной i - это у нас цвет, так и назовите ее color
 for i in rainbow_colors:
     sd.line(point_start, point_end, i, line_width)
     point_start_x += line_step
@@ -37,7 +38,7 @@ circle_line_step = 30
 circle_radius = 1000
 circle_center_x, circle_center_y = resolution_x, resolution_y * (-.5)
 circle_center = sd.get_point(circle_center_x, circle_center_y)
-
+# TODO нейминг, переменной i - это у нас цвет, так и назовите ее color
 for i in rainbow_colors:
     sd.circle(circle_center, circle_radius, i, circle_line_width)
     circle_radius -= circle_line_step
