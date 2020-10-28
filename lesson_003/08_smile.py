@@ -34,3 +34,5 @@ for _ in range(10):
     smile(random.randint(50, resolution_x - 50), random.randint(50, resolution_y - 50), simple_draw.random_color())
 
 simple_draw.pause()
+
+# зачет!

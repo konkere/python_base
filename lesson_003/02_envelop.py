@@ -79,3 +79,5 @@ for brick_x in range(1, brick_max + 1):
             else:
                 bricks_in_hole[(brick_x, brick_y, brick_z)] = 'НЕТ'
 pprint(bricks_in_hole)
+
+# зачет!

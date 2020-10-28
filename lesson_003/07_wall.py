@@ -12,12 +12,11 @@ simple_draw.resolution = (resolution_x, resolution_y)
 brick_width, brick_height = 100, 50
 
 for shift_y, y in enumerate(range(0, resolution_y, brick_height)):
-    x = 0
-
     if shift_y % 2 == 0:
-        shift_x = int(x - brick_width / 2)
+        # можно так
+        shift_x = 50
     else:
-        shift_x = x
+        shift_x = 0
 
     for x in range(shift_x, resolution_x, brick_width):
         brick_point_left_bottom = simple_draw.get_point(x, y)
@@ -35,3 +34,5 @@ for shift_y, y in enumerate(range(0, resolution_y, brick_height)):
 #           рисуем кирпич
 
 simple_draw.pause()
+
+# зачет!
