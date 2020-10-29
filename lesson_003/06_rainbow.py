@@ -43,3 +43,5 @@ for color in rainbow_colors:
     circle_radius -= circle_line_step
 
 sd.pause()
+
+# зачет!
