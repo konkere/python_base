@@ -58,7 +58,11 @@ store = {
 
 for product_name, product_code in goods.items():
     product_quantity, product_cost = 0, 0
-    for i in store[product_code]:
-        product_quantity += i['quantity']
-        product_cost += i['price'] * i['quantity']
+    # TODO тут у нас тоже нейминг, мы получаем параметры_продукта
+    # TODO нужно написать было вот так:
+    for parameter_product in store[product_code]:
+        product_quantity += parameter_product['quantity']
+        product_cost += parameter_product['price'] * parameter_product['quantity']
     print(product_name, '-', product_quantity, 'шт., стоимость', product_cost, 'руб.')
+
+# TODO если все понятно про нейминг поставлю зачет!
