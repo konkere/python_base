@@ -182,12 +182,12 @@ def pentagon_draw_v2(pentagon_point, start_angle, side_length, line_width=3):
 pentagon_draw_v2(sd.get_point(300, 450), 60, 200)
 
 
-def hexagon_draw(hexagon_point, start_angle, side_length, line_width=3):
+def hexagon_draw_v2(hexagon_point, start_angle, side_length, line_width=3):
     sides = 6
     polygon_draw(hexagon_point, start_angle, side_length, sides, line_width=line_width)
 
 
-hexagon_draw(sd.get_point(650, 400), 0, 200)
+hexagon_draw_v2(sd.get_point(650, 400), 0, 200)
 
 # Часть 2-бис.
 # А теперь - сколько надо работы что бы внести изменения в код? Выгода на лицо :)
