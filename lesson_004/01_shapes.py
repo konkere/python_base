@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import simple_draw as sd
+import time
 
 # Часть 1.
 # Написать функции рисования равносторонних геометрических фигур:
@@ -36,11 +37,13 @@ import simple_draw as sd
 # sd.line()
 # Результат решения см lesson_004/results/exercise_01_shapes.jpg
 
-sd.resolution = (1000, 800)
+resolution_x = 1000
+resolution_y = 800
+sd.resolution = (resolution_x, resolution_y)
 sd.caption = 'Shapes'
 
 
-def triangle_draw(triangle_point, start_angle, side_length, line_width = 3):
+def triangle_draw(triangle_point, start_angle, side_length, line_width=3):
     vector1 = sd.get_vector(start_point=triangle_point, angle=start_angle,
                             length=side_length, width=line_width)
     vector1.draw()
@@ -55,7 +58,7 @@ def triangle_draw(triangle_point, start_angle, side_length, line_width = 3):
 triangle_draw(sd.get_point(200, 100), 50, 200)
 
 
-def square_draw(square_point, start_angle, side_length, line_width = 3):
+def square_draw(square_point, start_angle, side_length, line_width=3):
     vector1 = sd.get_vector(start_point=square_point, angle=start_angle,
                             length=side_length, width=line_width)
     vector1.draw()
@@ -73,7 +76,7 @@ def square_draw(square_point, start_angle, side_length, line_width = 3):
 square_draw(sd.get_point(600, 100), 30, 200)
 
 
-def pentagon_draw(pentagon_point, start_angle, side_length, line_width = 3):
+def pentagon_draw(pentagon_point, start_angle, side_length, line_width=3):
     vector1 = sd.get_vector(start_point=pentagon_point, angle=start_angle,
                             length=side_length, width=line_width)
     vector1.draw()
@@ -97,7 +100,7 @@ def pentagon_draw(pentagon_point, start_angle, side_length, line_width = 3):
 pentagon_draw(sd.get_point(200, 450), 10, 200)
 
 
-def hexagon_draw(hexagon_point, start_angle, side_length, line_width = 3):
+def hexagon_draw(hexagon_point, start_angle, side_length, line_width=3):
     vector1 = sd.get_vector(start_point=hexagon_point, angle=start_angle,
                             length=side_length, width=line_width)
     vector1.draw()
@@ -123,6 +126,9 @@ def hexagon_draw(hexagon_point, start_angle, side_length, line_width = 3):
 
 hexagon_draw(sd.get_point(700, 400), 20, 200)
 
+time.sleep(3)
+sd.clear_screen()
+
 # Часть 1-бис.
 # Попробуйте прикинуть обьем работы, если нужно будет внести изменения в этот код.
 # Скажем, связывать точки не линиями, а дугами. Или двойными линиями. Или рисовать круги в угловых точках. Или...
@@ -140,6 +146,48 @@ hexagon_draw(sd.get_point(700, 400), 20, 200)
 #
 # Не забудте в этой общей функции придумать, как устранить разрыв в начальной/конечной точках рисуемой фигуры
 # (если он есть. подсказка - на последней итерации можно использовать линию от первой точки)
+
+
+def polygon_draw(polygon_point, start_angle, side_length, sides=3, line_width=3):
+    end_to_start_point = polygon_point
+    for side in range(sides - 1):
+        vector = sd.get_vector(start_point=end_to_start_point, angle=start_angle + 360*side/sides,
+                               length=side_length, width=line_width)
+        vector.draw()
+        end_to_start_point = vector.end_point
+    sd.line(end_to_start_point, polygon_point, width=line_width)
+
+
+def triangle_draw_v2(triangle_point, start_angle, side_length, line_width=3):
+    sides = 3
+    polygon_draw(triangle_point, start_angle, side_length, sides, line_width=line_width)
+
+
+triangle_draw_v2(sd.get_point(200, 100), 10, 200)
+
+
+def square_draw_v2(square_point, start_angle, side_length, line_width=3):
+    sides = 4
+    polygon_draw(square_point, start_angle, side_length, sides, line_width=line_width)
+
+
+square_draw_v2(sd.get_point(600, 100), 50, 200)
+
+
+def pentagon_draw_v2(pentagon_point, start_angle, side_length, line_width=3):
+    sides = 5
+    polygon_draw(pentagon_point, start_angle, side_length, sides, line_width=line_width)
+
+
+pentagon_draw_v2(sd.get_point(300, 450), 60, 200)
+
+
+def hexagon_draw(hexagon_point, start_angle, side_length, line_width=3):
+    sides = 6
+    polygon_draw(hexagon_point, start_angle, side_length, sides, line_width=line_width)
+
+
+hexagon_draw(sd.get_point(650, 400), 0, 200)
 
 # Часть 2-бис.
 # А теперь - сколько надо работы что бы внести изменения в код? Выгода на лицо :)
