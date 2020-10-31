@@ -36,7 +36,92 @@ import simple_draw as sd
 # sd.line()
 # Результат решения см lesson_004/results/exercise_01_shapes.jpg
 
-# TODO здесь ваш код
+sd.resolution = (1000, 800)
+sd.caption = 'Shapes'
+
+
+def triangle_draw(triangle_point, start_angle, side_length, line_width = 3):
+    vector1 = sd.get_vector(start_point=triangle_point, angle=start_angle,
+                            length=side_length, width=line_width)
+    vector1.draw()
+    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/3),
+                            length=side_length, width=line_width)
+    vector2.draw()
+    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/3),
+                            length=side_length, width=line_width)
+    vector3.draw()
+
+
+triangle_draw(sd.get_point(200, 100), 50, 200)
+
+
+def square_draw(square_point, start_angle, side_length, line_width = 3):
+    vector1 = sd.get_vector(start_point=square_point, angle=start_angle,
+                            length=side_length, width=line_width)
+    vector1.draw()
+    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/4),
+                            length=side_length, width=line_width)
+    vector2.draw()
+    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/4),
+                            length=side_length, width=line_width)
+    vector3.draw()
+    vector4 = sd.get_vector(start_point=vector3.end_point, angle=(start_angle + 360*3/4),
+                            length=side_length, width=line_width)
+    vector4.draw()
+
+
+square_draw(sd.get_point(600, 100), 30, 200)
+
+
+def pentagon_draw(pentagon_point, start_angle, side_length, line_width = 3):
+    vector1 = sd.get_vector(start_point=pentagon_point, angle=start_angle,
+                            length=side_length, width=line_width)
+    vector1.draw()
+    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/5),
+                            length=side_length, width=line_width)
+    vector2.draw()
+    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/5),
+                            length=side_length, width=line_width)
+    vector3.draw()
+    vector4 = sd.get_vector(start_point=vector3.end_point, angle=(start_angle + 360*3/5),
+                            length=side_length, width=line_width)
+    vector4.draw()
+    # vector5 = sd.get_vector(start_point=vector4.end_point, angle=(start_angle + 360*4/5),
+    #                         length=side_length, width=line_width)
+    # vector5.draw()
+    # sd.line(vector5.end_point, pentagon_point, width=line_width)
+    # \/ Вместо последнего вектора и фикса к нему, которые образуют излом
+    sd.line(vector4.end_point, pentagon_point, width=3)
+
+
+pentagon_draw(sd.get_point(200, 450), 10, 200)
+
+
+def hexagon_draw(hexagon_point, start_angle, side_length, line_width = 3):
+    vector1 = sd.get_vector(start_point=hexagon_point, angle=start_angle,
+                            length=side_length, width=line_width)
+    vector1.draw()
+    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/6),
+                            length=side_length, width=line_width)
+    vector2.draw()
+    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/6),
+                            length=side_length, width=line_width)
+    vector3.draw()
+    vector4 = sd.get_vector(start_point=vector3.end_point, angle=(start_angle + 360*3/6),
+                            length=side_length, width=line_width)
+    vector4.draw()
+    vector5 = sd.get_vector(start_point=vector4.end_point, angle=(start_angle + 360*4/6),
+                            length=side_length, width=line_width)
+    vector5.draw()
+    # vector6 = sd.get_vector(start_point=vector5.end_point, angle=(start_angle + 360*5/6),
+    #                         length=side_length, width=line_width)
+    # vector6.draw()
+    # sd.line(vector6.end_point, hexagon_point, width=line_width)
+    # \/ Вместо последнего вектора и фикса к нему, которые образуют излом
+    sd.line(vector5.end_point, hexagon_point, width=line_width)
+
+
+hexagon_draw(sd.get_point(700, 400), 20, 200)
 
 # Часть 1-бис.
 # Попробуйте прикинуть обьем работы, если нужно будет внести изменения в этот код.
