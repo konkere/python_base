@@ -2,6 +2,10 @@
 
 import simple_draw as sd
 
+resolution_x = 800
+resolution_y = 600
+sd.resolution = (resolution_x, resolution_y)
+sd.caption = 'Snowfall'
 
 # На основе кода из практической части реализовать снегопад:
 # - создать списки данных для отрисовки N снежинок
@@ -17,14 +21,29 @@ N = 20
 # sd.random_number()
 # sd.user_want_exit()
 
+snowflake_x = []
+snowflake_y = []
+snowflake_length = []
+snowflake_speed = 10
+for _ in range(N):
+    snowflake_x.append(sd.random_number(0, resolution_x))
+    snowflake_y.append(sd.random_number(resolution_y - 300, resolution_y))
+    snowflake_length.append(sd.random_number(10, 100))
 
-while True:
-    sd.clear_screen()
-    # TODO здесь ваш код
-    sd.sleep(0.1)
-    if sd.user_want_exit():
-        break
-sd.pause()
+# -= Задание 1 =- ---------------------начало------------------------
+# while True:
+#     sd.clear_screen()
+#     for i in range(N):
+#         x = snowflake_x[i]
+#         y = snowflake_y[i]
+#         sd.snowflake(center=sd.get_point(x, y), length=snowflake_length[i])
+#         if y > snowflake_length[i]:
+#             y = snowflake_y.pop(i) - snowflake_speed
+#             snowflake_y.insert(i, y)
+#     sd.sleep(0.1)
+#     if sd.user_want_exit():
+#         break
+# -= Задание 1 =- ---------------------конец------------------------
 
 # Примерный алгоритм отрисовки снежинок
 #   навсегда
@@ -66,9 +85,57 @@ sd.pause()
 #     если пользователь хочет выйти
 #       прервать цикл
 
+# -= Задание 2 =- ---------------------начало------------------------
+# while True:
+#     sd.start_drawing()
+#     for i in range(N):
+#         x = snowflake_x[i]
+#         y = snowflake_y[i]
+#         if y > snowflake_length[i]:
+#             sd.snowflake(center=sd.get_point(x, y), length=snowflake_length[i], color=sd.background_color)
+#             y = snowflake_y.pop(i) - snowflake_speed
+#             snowflake_y.insert(i, y)
+#         sd.snowflake(center=sd.get_point(x, y), length=snowflake_length[i])
+#     sd.finish_drawing()
+#     sd.sleep(0.1)
+#     if sd.user_want_exit():
+#         break
+# -= Задание 2 =- ---------------------конец------------------------
 
 # Усложненное задание (делать по желанию)
 # - сделать рандомные отклонения вправо/влево при каждом шаге
 # - сделать сугоб внизу экрана - если снежинка долетает до низа, оставлять её там,
 #   и добавлять новую снежинку
 # Результат решения см https://youtu.be/XBx0JtxHiLg
+
+# -= Задание 3 (усложненное) =- ---------------------начало------------------------
+snowdrift = []
+
+while True:
+    sd.start_drawing()
+    for i in range(N):
+        x = snowflake_x[i]
+        y = snowflake_y[i]
+        if y > snowflake_length[i]:
+            sd.snowflake(center=sd.get_point(x, y), length=snowflake_length[i], color=sd.background_color)
+            y = snowflake_y.pop(i) - snowflake_speed
+            snowflake_y.insert(i, y)
+            x = snowflake_x.pop(i) + sd.random_number(-20, 20)
+            snowflake_x.insert(i, x)
+        else:
+            if i in snowdrift:
+                pass
+            else:
+                snowflake_x.append(sd.random_number(0, resolution_x))
+                snowflake_y.append(sd.random_number(resolution_y - 300, resolution_y))
+                snowflake_length.append(sd.random_number(10, 100))
+                N += 1
+                snowdrift.append(i)
+        sd.snowflake(center=sd.get_point(x, y), length=snowflake_length[i])
+    sd.finish_drawing()
+    sd.sleep(0.1)
+    if sd.user_want_exit():
+        break
+# -= Задание 3 (усложненное) =- ---------------------конец------------------------
+
+sd.pause()
