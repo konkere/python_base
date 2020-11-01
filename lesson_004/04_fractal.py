@@ -91,10 +91,10 @@ def draw_branches_v3(start_point=sd.get_point(resolution_x / 2, 0), angle=branch
                      length=branch_length, color=branch_color, width=branch_width, delta_angle=30):
     if length < 10:
         return
-    length_1 = length * sd.random_number(100, 120) / 100
-    length_2 = length * sd.random_number(100, 120) / 100
-    angle_1 = angle + round(delta_angle * sd.random_number(100, 140) / 100)
-    angle_2 = angle - round(delta_angle * sd.random_number(100, 140) / 100)
+    length_1 = length * sd.random_number(80, 120) / 100
+    length_2 = length * sd.random_number(80, 120) / 100
+    angle_1 = angle + round(delta_angle * sd.random_number(60, 140) / 100)
+    angle_2 = angle - round(delta_angle * sd.random_number(60, 140) / 100)
     branch_1 = sd.vector(start=start_point, angle=angle_1, length=length_1, color=color, width=width)
     branch_2 = sd.vector(start=start_point, angle=angle_2, length=length_2, color=color, width=width)
     end_point_1 = branch_1
@@ -105,8 +105,8 @@ def draw_branches_v3(start_point=sd.get_point(resolution_x / 2, 0), angle=branch
 
 
 stem_point = sd.vector(start=sd.get_point(resolution_x / 2, 0), angle=stem_angle, length=branch_length / 2,
-                       color=sd.COLOR_GREEN, width=branch_width)
+                       color=sd.COLOR_GREEN, width=1)
 
-draw_branches_v3(start_point=stem_point, angle=90, length=branch_length)
+draw_branches_v3(start_point=stem_point, angle=90, length=branch_length, width=1)
 
 sd.pause()
