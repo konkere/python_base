@@ -49,8 +49,7 @@ def polygon_draw(polygon_point, start_angle, side_length, sides=3, color=color, 
     end_to_start_point = polygon_point
     for side in range(sides - 1):
         vector = sd.vector(start=end_to_start_point, angle=start_angle + 360*side/sides,
-                           length=side_length, width=line_width)
-        sd.line(end_to_start_point, vector, color, width=line_width)
+                           length=side_length, width=line_width, color=color)
         end_to_start_point = vector
     sd.line(end_to_start_point, polygon_point, color, width=line_width)
 
