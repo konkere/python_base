@@ -14,9 +14,14 @@ resolution_y = 800
 sd.resolution = (resolution_x, resolution_y)
 sd.caption = 'Shape select'
 
+# TODO в объекте данных, можно хранит не только строковое название но и саму функцию чтобы потом ее вызывать
+
+# TODO Примерно новый объект данных может выглядеть вот так:
+# TODO colors = {0: ['треугольник', функция_треугольник], 1: ['квадрат', функция_квадрат], и так далее!
 shapes_names = ('triangle', 'square', 'pentagon', 'hexagon')
 shapes = []
 color = sd.COLOR_WHITE
+# TODO аналогично
 for i, j in enumerate(shapes_names):
     print(i, '->', j)
     shapes.append((i, j))
@@ -40,6 +45,7 @@ else:
     shape_name = 'triangle'
 
 
+# TODO функции объявляем выше основной логики
 def polygon_draw(polygon_point, start_angle, side_length, sides=3, color=color, line_width=3):
     end_to_start_point = polygon_point
     for side in range(sides - 1):
@@ -70,7 +76,11 @@ def hexagon_draw(hexagon_point, start_angle, side_length, color, line_width=3):
 
 
 shape_start_point = sd.get_point(resolution_x / 2 - 100, resolution_y / 2 - 100)
+# TODO тогда тут если мы по ключу выберем нужную нам функцию! Важно! не ее название, а именно функцию.
+# TODO то нам останется подставить нужные параметры и вызвать ее тут используя ()
+# TODO тогда не придется писать такую вложенность!
 
+# TODO это будем делать в главной логике где получили функцию
 if shape_name == 'triangle':
     triangle_draw(shape_start_point, 0, 200, color)
 elif shape_name == 'square':

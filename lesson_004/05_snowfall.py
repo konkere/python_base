@@ -21,6 +21,12 @@ N = 20
 # sd.random_number()
 # sd.user_want_exit()
 
+# TODO чтобы не писать вот так, запишем через for _ in range(N): сократим пару 10-ок строк
+# TODO Для начало сформирует нужный нам список списков, объявим его до цикла
+# TODO Используя цикл фор _ in range(N): в нем
+# TODO x,y,length будем получать используя допустим x = sd.random_number(100,1200), y = sd.random_number(500, 600),
+#  length = sd.random_number(10,100)
+# TODO Создадим один общий список списков и назовем его параметры_снежинок.добавить([x,y,length])
 snowflake_x = []
 snowflake_y = []
 snowflake_length = []
@@ -31,18 +37,20 @@ for _ in range(N):
     snowflake_length.append(sd.random_number(10, 100))
 
 # -= Задание 1 =- ---------------------начало------------------------
-# while True:
-#     sd.clear_screen()
-#     for i in range(N):
-#         x = snowflake_x[i]
-#         y = snowflake_y[i]
-#         sd.snowflake(center=sd.get_point(x, y), length=snowflake_length[i])
-#         if y > snowflake_length[i]:
-#             y = snowflake_y.pop(i) - snowflake_speed
-#             snowflake_y.insert(i, y)
-#     sd.sleep(0.1)
-#     if sd.user_want_exit():
-#         break
+while True:
+    sd.clear_screen()
+    for i in range(N):
+        # TODO тут подкорректировать!
+        x = snowflake_x[i]
+        y = snowflake_y[i]
+        sd.snowflake(center=sd.get_point(x, y), length=snowflake_length[i])
+        if y > snowflake_length[i]:
+            # TODO списку по индексу снежинки присваиваем сразу 600 - верхняя граница чтобы она от туда падала!
+            y = snowflake_y.pop(i) - snowflake_speed
+            snowflake_y.insert(i, y)
+    sd.sleep(0.1)
+    if sd.user_want_exit():
+        break
 # -= Задание 1 =- ---------------------конец------------------------
 
 # Примерный алгоритм отрисовки снежинок
@@ -58,7 +66,7 @@ for _ in range(N):
 #       прервать цикл
 
 
-# Часть 2 (делается после зачета первой части)
+# TODO Часть 2 (делается после зачета первой части)
 #
 # Ускорить отрисовку снегопада
 # - убрать clear_screen() из цикла: полная очистка всего экрана - долгая операция.

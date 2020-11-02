@@ -23,6 +23,7 @@ colors = {'red': sd.COLOR_RED, 'orange': sd.COLOR_ORANGE, 'yellow': sd.COLOR_YEL
           'cyan': sd.COLOR_CYAN, 'blue': sd.COLOR_BLUE, 'purple': sd.COLOR_PURPLE}
 
 color_names = []
+# TODO нейминг переменных пишите развернуто по j - не понятно что там внутри
 for i, j in enumerate(colors):
     print(i, '->', j)
     color_names.append((i, j))
@@ -45,6 +46,7 @@ else:
     color = sd.COLOR_RED
 
 
+# TODO функции объявляем выше основной логики
 def polygon_draw(polygon_point, start_angle, side_length, sides=3, color=color, line_width=3):
     end_to_start_point = polygon_point
     for side in range(sides - 1):

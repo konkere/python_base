@@ -42,8 +42,13 @@ resolution_y = 800
 sd.resolution = (resolution_x, resolution_y)
 sd.caption = 'Shapes'
 
+# TODO для рисования фигур(их линий) используем цикл во всех функциях, в цикле через range получаем angle
+# TODO получаем angle сразу в цикле через range(0, 360-шаг-наклон, шаг-наклон) не забываем что круг у нас всего 360 градусов
 
 def triangle_draw(triangle_point, start_angle, side_length, line_width=3):
+    # TODO вам нужно перед циклом запомнить параметр point_0 в исходном состоянии для того чтобы потом использовать
+    # TODO в sd.line в качестве параметра конечной точки, а начальную точку использовать уже point_0
+    # TODO который будет равен v1.end_point
     vector1 = sd.get_vector(start_point=triangle_point, angle=start_angle,
                             length=side_length, width=line_width)
     vector1.draw()
@@ -53,7 +58,7 @@ def triangle_draw(triangle_point, start_angle, side_length, line_width=3):
     vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/3),
                             length=side_length, width=line_width)
     vector3.draw()
-
+    # TODO рисуем после цикла фор линией
 
 triangle_draw(sd.get_point(200, 100), 50, 200)
 

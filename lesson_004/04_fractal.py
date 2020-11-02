@@ -40,6 +40,8 @@ branch_color = sd.COLOR_GREEN
 branch_width = 3
 
 
+# TODO во всех функция вектор должен быть один!
+
 def draw_branches(start_point=sd.get_point(resolution_x / 2, 0),
                   angle=branch_angle, length=branch_length, color=branch_color, width=branch_width):
     sd.vector(start=start_point, angle=stem_angle - angle, length=length, color=color, width=width)
