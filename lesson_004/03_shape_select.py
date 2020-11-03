@@ -13,39 +13,10 @@ resolution_x = 800
 resolution_y = 800
 sd.resolution = (resolution_x, resolution_y)
 sd.caption = 'Shape select'
-
-# TODO в объекте данных, можно хранит не только строковое название но и саму функцию чтобы потом ее вызывать
-
-# TODO Примерно новый объект данных может выглядеть вот так:
-# TODO colors = {0: ['треугольник', функция_треугольник], 1: ['квадрат', функция_квадрат], и так далее!
-shapes_names = ('triangle', 'square', 'pentagon', 'hexagon')
-shapes = []
 color = sd.COLOR_WHITE
-# TODO аналогично
-for i, j in enumerate(shapes_names):
-    print(i, '->', j)
-    shapes.append((i, j))
+shape_start_point = sd.get_point(resolution_x / 2 - 100, resolution_y / 2 - 100)
 
 
-user_input = input('Выберите фигуру (введите её номер): ')
-
-if user_input.isdecimal():
-    shape_number = int(user_input)
-    if 0 <= shape_number < 4:
-        shape_name = shapes[shape_number][1]
-        print('Вы выбрали:', shapes[shape_number][1])
-    else:
-        print('В списке нет такого номера. Нарисую треугольник.')
-        shape_name = 'triangle'
-elif user_input == '':
-    print('Вы не ввели номер фигуры. Нарисую треугольник.')
-    shape_name = 'triangle'
-else:
-    print('Вы ввели не номер. Нарисую треугольник.')
-    shape_name = 'triangle'
-
-
-# TODO функции объявляем выше основной логики
 def polygon_draw(polygon_point, start_angle, side_length, sides=3, color=color, line_width=3):
     end_to_start_point = polygon_point
     for side in range(sides - 1):
@@ -75,19 +46,29 @@ def hexagon_draw(hexagon_point, start_angle, side_length, color, line_width=3):
     polygon_draw(hexagon_point, start_angle, side_length, sides, color, line_width=line_width)
 
 
-shape_start_point = sd.get_point(resolution_x / 2 - 100, resolution_y / 2 - 100)
-# TODO тогда тут если мы по ключу выберем нужную нам функцию! Важно! не ее название, а именно функцию.
-# TODO то нам останется подставить нужные параметры и вызвать ее тут используя ()
-# TODO тогда не придется писать такую вложенность!
+shapes = {0: ['triangle', triangle_draw],
+          1: ['square', square_draw],
+          2: ['pentagon', pentagon_draw],
+          3: ['hexagon', hexagon_draw]}
 
-# TODO это будем делать в главной логике где получили функцию
-if shape_name == 'triangle':
-    triangle_draw(shape_start_point, 0, 200, color)
-elif shape_name == 'square':
-    square_draw(shape_start_point, 0, 200, color)
-elif shape_name == 'pentagon':
-    pentagon_draw(shape_start_point, 0, 200, color)
-elif shape_name == 'hexagon':
-    hexagon_draw(shape_start_point, 0, 200, color)
+for shape_number in shapes:
+    print(shape_number, '->', shapes.get(shape_number)[0])
+
+user_input = input('Выберите фигуру (введите её номер): ')
+
+if user_input.isdecimal():
+    shape_number = int(user_input)
+    if 0 <= shape_number < 4:
+        print('Вы выбрали:', shapes.get(shape_number)[0])
+        shapes.get(shape_number)[1](shape_start_point, 0, 200, color)
+    else:
+        print('В списке нет такого номера.')
+        exit()
+elif user_input == '':
+    print('Вы не ввели номер фигуры.')
+    exit()
+else:
+    print('Вы ввели не номер.')
+    exit()
 
 sd.pause()

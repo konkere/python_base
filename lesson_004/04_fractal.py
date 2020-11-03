@@ -40,18 +40,30 @@ branch_color = sd.COLOR_GREEN
 branch_width = 3
 
 
-# TODO во всех функция вектор должен быть один!
+# В задании просили _функцию_ (одну), которая должна рисовать _две_ ветви дерева из начальной точки.
+# Но пусть так:
+# ---------------------------Вариант 1 часть 1 начало---------------------------
+# def draw_branches(start_point=sd.get_point(resolution_x / 2, 0),
+#                   angle=branch_angle, length=branch_length, color=branch_color, width=branch_width):
+#     sd.vector(start=start_point, angle=stem_angle + angle, length=length, color=color, width=width)
+# ---------------------------Вариант 1 часть 1 конец---------------------------
 
+# Или так:
+# ---------------------------Вариант 2 начало---------------------------
 def draw_branches(start_point=sd.get_point(resolution_x / 2, 0),
                   angle=branch_angle, length=branch_length, color=branch_color, width=branch_width):
-    sd.vector(start=start_point, angle=stem_angle - angle, length=length, color=color, width=width)
-    sd.vector(start=start_point, angle=stem_angle + angle, length=length, color=color, width=width)
+    angles = [-angle, angle]
+    for angle in angles:
+        sd.vector(start=start_point, angle=stem_angle + angle, length=length, color=color, width=width)
+# ---------------------------Вариант 2 конец---------------------------
 
 
 stem_point = sd.vector(start=sd.get_point(resolution_x / 2, 0), angle=stem_angle, length=branch_length,
                        color=sd.COLOR_GREEN, width=branch_width)
-
 draw_branches(start_point=stem_point, angle=30, length=200)
+# ---------------------------Вариант 1 часть 2 начало---------------------------
+# draw_branches(start_point=stem_point, angle=-30, length=200)
+# ---------------------------Вариант 1 часть 2 конец---------------------------
 
 time.sleep(3)
 sd.clear_screen()
@@ -61,21 +73,15 @@ def draw_branches_v2(start_point=sd.get_point(resolution_x / 2, 0), angle=branch
                      length=branch_length, color=branch_color, width=branch_width, delta_angle=30):
     if length < 10:
         return
-    angle_1 = angle + delta_angle
-    angle_2 = angle - delta_angle
-    branch_1 = sd.vector(start=start_point, angle=angle_1, length=length, color=color, width=width)
-    branch_2 = sd.vector(start=start_point, angle=angle_2, length=length, color=color, width=width)
-    end_point_1 = branch_1
-    end_point_2 = branch_2
+    branch = sd.vector(start=start_point, angle=angle, length=length, color=color, width=width)
+    end_point = branch
     length *= .75
-    draw_branches_v2(start_point=end_point_1, angle=angle_1, length=length, color=color, width=width)
-    draw_branches_v2(start_point=end_point_2, angle=angle_2, length=length, color=color, width=width)
+    draw_branches_v2(start_point=end_point, angle=angle + delta_angle, length=length, color=color, width=width)
+    draw_branches_v2(start_point=end_point, angle=angle - delta_angle, length=length, color=color, width=width)
 
 
-stem_point = sd.vector(start=sd.get_point(300, 0), angle=stem_angle, length=30,
-                       color=sd.COLOR_GREEN, width=branch_width)
-
-draw_branches_v2(start_point=stem_point, angle=90, length=100)
+root_point = sd.get_point(300, 30)
+draw_branches_v2(start_point=root_point, angle=90, length=100)
 
 # 4) Усложненное задание (делать по желанию)
 # - сделать рандомное отклонение угла ветвей в пределах 40% от 30-ти градусов
@@ -91,24 +97,18 @@ sd.clear_screen()
 
 def draw_branches_v3(start_point=sd.get_point(resolution_x / 2, 0), angle=branch_angle,
                      length=branch_length, color=branch_color, width=branch_width, delta_angle=30):
-    if length < 10:
-        return
-    length_1 = length * sd.random_number(80, 120) / 100
-    length_2 = length * sd.random_number(80, 120) / 100
+    length_1 = length * .75 * sd.random_number(80, 120) / 100
+    length_2 = length * .75 * sd.random_number(80, 120) / 100
     angle_1 = angle + round(delta_angle * sd.random_number(60, 140) / 100)
     angle_2 = angle - round(delta_angle * sd.random_number(60, 140) / 100)
-    branch_1 = sd.vector(start=start_point, angle=angle_1, length=length_1, color=color, width=width)
-    branch_2 = sd.vector(start=start_point, angle=angle_2, length=length_2, color=color, width=width)
-    end_point_1 = branch_1
-    end_point_2 = branch_2
-    length *= .75
-    draw_branches_v3(start_point=end_point_1, angle=angle_1, length=length, color=color, width=width)
-    draw_branches_v3(start_point=end_point_2, angle=angle_2, length=length, color=color, width=width)
+    branch = sd.vector(start=start_point, angle=angle, length=length, color=color, width=width)
+    end_point = branch
+    if length < 10:
+        return
+    draw_branches_v3(start_point=end_point, angle=angle_1, length=length_1, color=color, width=width)
+    draw_branches_v3(start_point=end_point, angle=angle_2, length=length_2, color=color, width=width)
 
 
-stem_point = sd.vector(start=sd.get_point(resolution_x / 2, 0), angle=stem_angle, length=branch_length / 2,
-                       color=sd.COLOR_GREEN, width=1)
-
-draw_branches_v3(start_point=stem_point, angle=90, length=branch_length, width=1)
+draw_branches_v3(angle=90, width=1)
 
 sd.pause()

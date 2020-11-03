@@ -42,91 +42,58 @@ resolution_y = 800
 sd.resolution = (resolution_x, resolution_y)
 sd.caption = 'Shapes'
 
-# TODO для рисования фигур(их линий) используем цикл во всех функциях, в цикле через range получаем angle
-# TODO получаем angle сразу в цикле через range(0, 360-шаг-наклон, шаг-наклон) не забываем что круг у нас всего 360 градусов
 
 def triangle_draw(triangle_point, start_angle, side_length, line_width=3):
-    # TODO вам нужно перед циклом запомнить параметр point_0 в исходном состоянии для того чтобы потом использовать
-    # TODO в sd.line в качестве параметра конечной точки, а начальную точку использовать уже point_0
-    # TODO который будет равен v1.end_point
-    vector1 = sd.get_vector(start_point=triangle_point, angle=start_angle,
-                            length=side_length, width=line_width)
-    vector1.draw()
-    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/3),
-                            length=side_length, width=line_width)
-    vector2.draw()
-    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/3),
-                            length=side_length, width=line_width)
-    vector3.draw()
-    # TODO рисуем после цикла фор линией
+    point_0 = triangle_point
+    angle = round(360/3)
+    for vector_angle in range(0, angle * 2, angle):
+        vector = sd.get_vector(start_point=triangle_point, angle=vector_angle + start_angle,
+                               length=side_length, width=line_width)
+        vector.draw()
+        triangle_point = vector.end_point
+    sd.line(start_point=triangle_point, end_point=point_0, width=line_width)
+
 
 triangle_draw(sd.get_point(200, 100), 50, 200)
 
 
 def square_draw(square_point, start_angle, side_length, line_width=3):
-    vector1 = sd.get_vector(start_point=square_point, angle=start_angle,
-                            length=side_length, width=line_width)
-    vector1.draw()
-    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/4),
-                            length=side_length, width=line_width)
-    vector2.draw()
-    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/4),
-                            length=side_length, width=line_width)
-    vector3.draw()
-    vector4 = sd.get_vector(start_point=vector3.end_point, angle=(start_angle + 360*3/4),
-                            length=side_length, width=line_width)
-    vector4.draw()
+    point_0 = square_point
+    angle = round(360/4)
+    for vector_angle in range(0, angle * 3, angle):
+        vector = sd.get_vector(start_point=square_point, angle=vector_angle + start_angle,
+                               length=side_length, width=line_width)
+        vector.draw()
+        square_point = vector.end_point
+    sd.line(start_point=square_point, end_point=point_0, width=line_width)
 
 
 square_draw(sd.get_point(600, 100), 30, 200)
 
 
 def pentagon_draw(pentagon_point, start_angle, side_length, line_width=3):
-    vector1 = sd.get_vector(start_point=pentagon_point, angle=start_angle,
-                            length=side_length, width=line_width)
-    vector1.draw()
-    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/5),
-                            length=side_length, width=line_width)
-    vector2.draw()
-    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/5),
-                            length=side_length, width=line_width)
-    vector3.draw()
-    vector4 = sd.get_vector(start_point=vector3.end_point, angle=(start_angle + 360*3/5),
-                            length=side_length, width=line_width)
-    vector4.draw()
-    # vector5 = sd.get_vector(start_point=vector4.end_point, angle=(start_angle + 360*4/5),
-    #                         length=side_length, width=line_width)
-    # vector5.draw()
-    # sd.line(vector5.end_point, pentagon_point, width=line_width)
-    # \/ Вместо последнего вектора и фикса к нему, которые образуют излом
-    sd.line(vector4.end_point, pentagon_point, width=3)
+    point_0 = pentagon_point
+    angle = round(360/5)
+    for vector_angle in range(0, angle * 4, angle):
+        vector = sd.get_vector(start_point=pentagon_point, angle=vector_angle + start_angle,
+                               length=side_length, width=line_width)
+        vector.draw()
+        pentagon_point = vector.end_point
+    sd.line(start_point=pentagon_point, end_point=point_0, width=line_width)
 
 
 pentagon_draw(sd.get_point(200, 450), 10, 200)
 
 
 def hexagon_draw(hexagon_point, start_angle, side_length, line_width=3):
-    vector1 = sd.get_vector(start_point=hexagon_point, angle=start_angle,
-                            length=side_length, width=line_width)
-    vector1.draw()
-    vector2 = sd.get_vector(start_point=vector1.end_point, angle=(start_angle + 360/6),
-                            length=side_length, width=line_width)
-    vector2.draw()
-    vector3 = sd.get_vector(start_point=vector2.end_point, angle=(start_angle + 360*2/6),
-                            length=side_length, width=line_width)
-    vector3.draw()
-    vector4 = sd.get_vector(start_point=vector3.end_point, angle=(start_angle + 360*3/6),
-                            length=side_length, width=line_width)
-    vector4.draw()
-    vector5 = sd.get_vector(start_point=vector4.end_point, angle=(start_angle + 360*4/6),
-                            length=side_length, width=line_width)
-    vector5.draw()
-    # vector6 = sd.get_vector(start_point=vector5.end_point, angle=(start_angle + 360*5/6),
-    #                         length=side_length, width=line_width)
-    # vector6.draw()
-    # sd.line(vector6.end_point, hexagon_point, width=line_width)
-    # \/ Вместо последнего вектора и фикса к нему, которые образуют излом
-    sd.line(vector5.end_point, hexagon_point, width=line_width)
+    point_0 = hexagon_point
+    angle = round(360/6)
+    for vector_angle in range(0, angle * 5, angle):
+        vector = sd.get_vector(start_point=hexagon_point, angle=vector_angle + start_angle,
+                               length=side_length, width=line_width)
+        vector.draw()
+        hexagon_point = vector.end_point
+    sd.line(start_point=hexagon_point, end_point=point_0, width=line_width)
 
 
 hexagon_draw(sd.get_point(700, 400), 20, 200)
