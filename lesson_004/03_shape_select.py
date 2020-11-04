@@ -63,12 +63,16 @@ if user_input.isdecimal():
         shapes.get(shape_number)[1](shape_start_point, 0, 200, color)
     else:
         print('В списке нет такого номера.')
+        # Лучше не использовать а логически завершать программу!
         exit()
 elif user_input == '':
     print('Вы не ввели номер фигуры.')
     exit()
 else:
     print('Вы ввели не номер.')
-    exit()
+    # Лучше не использовать а логически завершать программу! Тут он точно не нужен
+    # exit()
 
 sd.pause()
+
+# зачет!
