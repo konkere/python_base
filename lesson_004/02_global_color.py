@@ -85,3 +85,5 @@ pentagon_draw(sd.get_point(300, 450), 60, 200, color)
 hexagon_draw(sd.get_point(650, 400), 0, 200, color)
 
 sd.pause()
+
+# зачет!
