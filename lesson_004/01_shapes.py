@@ -168,3 +168,5 @@ hexagon_draw_v2(sd.get_point(650, 400), 0, 200)
 
 
 sd.pause()
+
+# зачет!
