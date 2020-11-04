@@ -112,3 +112,5 @@ def draw_branches_v3(start_point=sd.get_point(resolution_x / 2, 0), angle=branch
 draw_branches_v3(angle=90, width=1)
 
 sd.pause()
+
+# зачет!
