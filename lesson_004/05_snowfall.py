@@ -181,12 +181,13 @@ while True:
         length = snowflakes[i][2]
         snowflake_point = sd.get_point(x, y)
         sd.snowflake(snowflake_point, length, color=sd.background_color)
-        x = snowflakes[i][0] + sd.random_number(-20, 20)
-        y = snowflakes[i][1] - snowflake_speed
-        snowflakes[i][0] = x
-        snowflakes[i][1] = y
+        # тут делаем так
+        x += sd.random_number(-20, 20)
+        y -= snowflake_speed
         snowflake_point = sd.get_point(x, y)
         sd.snowflake(snowflake_point, length)
+        # а тут так
+        snowflakes[i] = [x, y, length]
         if y < length_snow:
             snowflakes[i][1] = resolution_y
             length_snow += 1
@@ -200,3 +201,4 @@ while True:
 
 sd.pause()
 
+# зачет!
