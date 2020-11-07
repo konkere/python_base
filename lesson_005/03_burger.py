@@ -15,4 +15,26 @@
 # Создать рецепт своего бургера, по вашему вкусу.
 # Если не хватает инградиентов - создать соответствующие функции в модуле my_burger
 
-# TODO здесь ваш код
+import my_burger as mb
+
+mb.begin_burger('двойной чизбургер')
+mb.bun_ingredient()
+mb.cutlet_ingredient()
+mb.cheese_ingredient()
+mb.cutlet_ingredient()
+mb.cheese_ingredient()
+mb.cucumber_ingredient()
+mb.tomato_ingredient()
+mb.mayonnaise_ingredient()
+mb.bun_ingredient()
+mb.end_burger()
+
+mb.next_burger()
+mb.begin_burger('хрустящий острый бургер')
+mb.bun_ingredient()
+mb.french_fries_ingredient()
+mb.cutlet_ingredient()
+mb.special_secret_sauce_ingredient()
+mb.pickle_ingredient()
+mb.bun_ingredient()
+mb.end_burger()

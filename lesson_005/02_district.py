@@ -5,4 +5,18 @@
 # подсказка: для вывода элементов списка через запятую можно использовать функцию строки .join()
 # https://docs.python.org/3/library/stdtypes.html#str.join
 
-# TODO здесь ваш код
+import district.central_street.house1.room1
+import district.central_street.house1.room2
+import district.central_street.house2.room1
+import district.central_street.house2.room2
+import district.soviet_street.house1.room1
+import district.soviet_street.house1.room2
+import district.soviet_street.house2.room1
+import district.soviet_street.house2.room2
+
+district_ppl = ', '.join(district.central_street.house1.room1.folks + district.central_street.house1.room2.folks +
+                         district.central_street.house2.room1.folks + district.central_street.house2.room2.folks +
+                         district.soviet_street.house1.room1.folks + district.soviet_street.house1.room2.folks +
+                         district.soviet_street.house2.room1.folks + district.soviet_street.house2.room2.folks)
+
+print('На районе живут:', district_ppl)
