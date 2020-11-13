@@ -22,6 +22,7 @@ def bricks(start_x, start_y, width, height, brick_width):
 
 def house(ground_height=100, house_shift_x=300, house_height=300, house_width=600, brick_width=40):
     brick_color = (178, 34, 34)
+    window_color = sd.COLOR_BLACK
     # каркас дома
     house_frame_point_left_bottom = sd.get_point(house_shift_x, ground_height)
     house_frame_point_right_top = sd.get_point(house_shift_x + house_width, ground_height + house_height)
@@ -53,7 +54,7 @@ def house(ground_height=100, house_shift_x=300, house_height=300, house_width=60
     window_y_2 = ground_height + house_height * 2 / 3
     window_point_left_bottom = sd.get_point(window_x_1, window_y_1)
     window_point_right_top = sd.get_point(window_x_2, window_y_2)
-    sd.rectangle(window_point_left_bottom, window_point_right_top, sd.COLOR_BLACK, width=0)
+    sd.rectangle(window_point_left_bottom, window_point_right_top, window_color, width=0)
     sd.rectangle(window_point_left_bottom, window_point_right_top, sd.COLOR_WHITE, width=1)
     # дверь
     door_point_left_bottom = sd.get_point(house_shift_x + house_width * 0.8, ground_height)
@@ -62,7 +63,7 @@ def house(ground_height=100, house_shift_x=300, house_height=300, house_width=60
     sd.rectangle(door_point_left_bottom, door_point_right_top, sd.COLOR_WHITE, width=1)
     doorhandle_point = sd.get_point(house_shift_x + house_width * 0.85, ground_height + house_height / 2)
     sd.circle(doorhandle_point, radius=8, color=sd.COLOR_BLACK, width=0)
-    return window_x_1, window_y_1, window_x_2, window_y_2
+    return window_x_1, window_y_1, window_x_2, window_y_2, window_color
 
 
 if __name__ == '__main__':
