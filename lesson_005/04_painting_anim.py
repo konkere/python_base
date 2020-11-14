@@ -27,6 +27,7 @@ import simple_draw as sd
 from village_morning_static.house import house
 from village_morning_static.tree import tree
 from village_morning_anim.rainbow import rainbow
+from village_morning_anim.sun import sun_without_rays
 from village_morning_anim.sun import sun
 from village_morning_anim.face import face
 from village_morning_anim.snowfall import snowfall
@@ -46,11 +47,11 @@ rainbow_colors = [sd.COLOR_RED, sd.COLOR_ORANGE, sd.COLOR_YELLOW, sd.COLOR_GREEN
 sun_angle = 0
 eye_blink = 0
 snowflakes = []
-snowflakes_quantity = 50
+snowflakes_quantity = 100
 
 for _ in range(snowflakes_quantity):
-    x = sd.random_number(0 - resolution_y, house_shift_x - resolution_y)
-    y = sd.random_number(resolution_y - 200, resolution_y)
+    x = sd.random_number(-resolution_y, resolution_x)
+    y = sd.random_number(0, resolution_y)
     length = sd.random_number(5, 15)
     snowflakes.append([x, y, length])
 
@@ -61,11 +62,15 @@ face_x = (window_returns[0] + window_returns[2]) / 2
 face_y = (window_returns[1] + window_returns[3]) / 2
 window_color = window_returns[4]
 tree(start_point=tree_root)
+sun_without_rays()
 sd.finish_drawing()
+
+sd.take_background()
 
 # Anim draw
 while True:
     sd.start_drawing()
+    sd.draw_background()
     rainbow(rainbow_colors=rainbow_colors)
     rainbow_colors.insert(0, rainbow_colors.pop(6))
     sun(color=sd.background_color, rotate_angle=sun_angle)
@@ -77,7 +82,7 @@ while True:
     face(face_x, face_y, window_color, eye_blink)
     eye_blink = sd.random_number(0, 4)
     face(face_x, face_y, sd.COLOR_WHITE, eye_blink)
-    snowfall(snowflakes=snowflakes, ground_height=ground_height, house_shift_x=house_shift_x)
+    snowfall(snowflakes=snowflakes, ground_height=ground_height, resolution_x=resolution_x, resolution_y=resolution_y)
     sd.rectangle(ground_point_1, ground_point_2, sd.COLOR_DARK_GREEN)
     sd.sleep(0.1)
     sd.finish_drawing()
