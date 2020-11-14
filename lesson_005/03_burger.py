@@ -38,3 +38,5 @@ mb.special_secret_sauce_ingredient()
 mb.pickle_ingredient()
 mb.bun_ingredient()
 mb.end_burger()
+
+# зачет!
