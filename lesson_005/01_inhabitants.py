@@ -11,3 +11,5 @@ ppl_room_2 = ', '.join(room_2.folks)
 
 print('В комнате room_1 живут:', ppl_room_1)
 print('В комнате room_2 живут:', ppl_room_2)
+
+# зачет!
