@@ -44,4 +44,32 @@
 # Это пример применения SOLID принципа (см https://goo.gl/GFMoaI) в архитектуре программ.
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
 
-# TODO здесь ваш код...
+from colorterminal import ColorText
+from mastermind_engine import pick_secret_number, check_secret_number
+
+user_number = ""
+secret_number = pick_secret_number()
+user_turn = 0
+bulls_and_cows = [0, 0]
+
+
+def check_user_number(user_number):
+    if (user_number.isdigit()) and (999 < int(user_number) < 10000):
+        user_number_list = list(map(int, user_number))
+        user_number_set = set(user_number_list)
+        return len(user_number_list) == len(user_number_set)
+    return False
+
+
+print(ColorText.GREEN + 'Я загадал 4-значное число (первая цифра не ноль, все цифры уникальны).')
+print('Попробуешь угадать?')
+
+while not bulls_and_cows[0] == 4:
+    user_turn += 1
+    while check_user_number(user_number) is False:
+        user_number = input(ColorText.BEREZOVY + 'Попытка №{0}: '.format(user_turn))
+    bulls_and_cows = check_secret_number(user_number)
+    print(ColorText.YELLOW + 'Быков: {0}, коров: {1}'.format(*bulls_and_cows))
+    user_number = ""
+else:
+    print(ColorText.PURPLE + 'Побeда! Ходов сделано: {0}.'.format(user_turn))
