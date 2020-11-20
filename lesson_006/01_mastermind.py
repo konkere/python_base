@@ -59,7 +59,6 @@ user_number = ""
 secret_number = pick_secret_number()
 user_turn = 0
 bulls_and_cows = [0, 0]
-print(secret_number)
 
 print(colored('Я загадал 4-значное число (первая цифра не ноль, все цифры уникальны).', 'green'))
 print(colored('Попробуешь угадать?', 'green'))
