@@ -38,6 +38,8 @@ while True:
     #       удалить_снежинки(номера)
     #       создать_снежинки(count)
     snowflakes_on_ground = check_snowflakes_on_ground()
+    # TODO тут можно чекать просто if snowflakes_on_ground:
+    # TODO Если что то есть в snowflakes_on_ground то будет True
     if not snowflakes_on_ground == []:
         destroy_snowflakes(snowflakes_on_ground)
         make_snowflakes(len(snowflakes_on_ground), resolution_x, resolution_y + 300)
