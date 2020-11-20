@@ -45,36 +45,31 @@
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
 
 # TODO либа на 3.8.5 не накатилась попробуйте эту библиотеку from termcolor import colored использовать
+# На 3.8.6 завелось. А cprint из лекции наоборот, не захотел.
+
+# termcolor не умеет раскрашивать input и .format  ):
+
 # TODO Возможно я ставил не ту, Она у вас самописная ?
-from colorterminal import ColorText
-from mastermind_engine import pick_secret_number, check_secret_number
+# Нет, просто нашёл на pypi не очень старую по последнему релизу и не очень перегруженную лишними параметрами
+
+from termcolor import colored
+from mastermind_engine import pick_secret_number, check_secret_number, check_user_number
 
 user_number = ""
 secret_number = pick_secret_number()
 user_turn = 0
 bulls_and_cows = [0, 0]
+print(secret_number)
 
-
-# TODO это нужно вынести в API
-def check_user_number(user_number):
-    if (user_number.isdigit()) and (999 < int(user_number) < 10000):
-        user_number_list = list(map(int, user_number))
-        user_number_set = set(user_number_list)
-        return len(user_number_list) == len(user_number_set)
-    return False
-
-
-print(ColorText.GREEN + 'Я загадал 4-значное число (первая цифра не ноль, все цифры уникальны).')
-print('Попробуешь угадать?')
+print(colored('Я загадал 4-значное число (первая цифра не ноль, все цифры уникальны).', 'green'))
+print(colored('Попробуешь угадать?', 'green'))
 
 while not bulls_and_cows[0] == 4:
     user_turn += 1
     while check_user_number(user_number) is False:
-        user_number = input(ColorText.BEREZOVY + 'Попытка №{0}: '.format(user_turn))
+        user_number = input('Попытка №{0}: '.format(user_turn))
     bulls_and_cows = check_secret_number(user_number)
-    print(ColorText.YELLOW + 'Быков: {0}, коров: {1}'.format(*bulls_and_cows))
+    print('Быков: {0}, коров: {1}'.format(*bulls_and_cows))
     user_number = ""
 else:
-    print(ColorText.PURPLE + 'Побeда! Ходов сделано: {0}.'.format(user_turn))
-
-# TODO потестить пока не получилось.
+    print('Побeда! Ходов сделано: {0}.'.format(user_turn))

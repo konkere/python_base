@@ -32,10 +32,9 @@ def fall_snowflakes():
 def check_snowflakes_on_ground():
     global snowflakes
     snowflakes_on_ground = []
-    # TODO итерируйтесь сразу по snowflakes получая в заголовке еще и индекс, используя enumerate
-    for snowflake in range(len(snowflakes)):
-        if snowflakes[snowflake][1] < -50:
-            snowflakes_on_ground.append(snowflake)
+    for snowflake in enumerate(snowflakes):
+        if snowflake[1][1] < -50:
+            snowflakes_on_ground.append(snowflake[0])
     return snowflakes_on_ground
 
 
@@ -43,8 +42,4 @@ def destroy_snowflakes(snowflakes_on_ground):
     global snowflakes
     snowflakes_on_ground.reverse()
     for snowflake in snowflakes_on_ground:
-        # TODO pop - удаляет элемент возвращая его, но мы его не принимаем, попробуйте заменить функцию удаления
-        # TODO подходящей.
-        snowflakes.pop(snowflake)
-
-# TODO а так отлично
+        del snowflakes[snowflake]

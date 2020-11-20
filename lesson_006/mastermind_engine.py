@@ -27,3 +27,11 @@ def check_secret_number(user_number):
             bulls += 1
     cows -= bulls
     return bulls, cows
+
+
+def check_user_number(user_number):
+    if (user_number.isdigit()) and (999 < int(user_number) < 10000):
+        user_number_list = list(map(int, user_number))
+        user_number_set = set(user_number_list)
+        return len(user_number_list) == len(user_number_set)
+    return False
