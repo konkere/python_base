@@ -44,6 +44,8 @@
 # Это пример применения SOLID принципа (см https://goo.gl/GFMoaI) в архитектуре программ.
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
 
+# TODO либа на 3.8.5 не накатилась попробуйте эту библиотеку from termcolor import colored использовать
+# TODO Возможно я ставил не ту, Она у вас самописная ?
 from colorterminal import ColorText
 from mastermind_engine import pick_secret_number, check_secret_number
 
@@ -53,6 +55,7 @@ user_turn = 0
 bulls_and_cows = [0, 0]
 
 
+# TODO это нужно вынести в API
 def check_user_number(user_number):
     if (user_number.isdigit()) and (999 < int(user_number) < 10000):
         user_number_list = list(map(int, user_number))
@@ -73,3 +76,5 @@ while not bulls_and_cows[0] == 4:
     user_number = ""
 else:
     print(ColorText.PURPLE + 'Побeда! Ходов сделано: {0}.'.format(user_turn))
+
+# TODO потестить пока не получилось.
