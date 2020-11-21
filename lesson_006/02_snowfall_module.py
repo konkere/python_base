@@ -47,3 +47,5 @@ while True:
         break
 
 sd.pause()
+
+# зачет!
