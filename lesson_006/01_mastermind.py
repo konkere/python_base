@@ -47,12 +47,14 @@
 # TODO либа на 3.8.5 не накатилась попробуйте эту библиотеку from termcolor import colored использовать
 # На 3.8.6 завелось. А cprint из лекции наоборот, не захотел.
 
+# Завёлся-таки cprint, им раскрасил (без инпута)
+
 # termcolor не умеет раскрашивать input и .format  ):
 
 # TODO Возможно я ставил не ту, Она у вас самописная ?
 # Нет, просто нашёл на pypi не очень старую по последнему релизу и не очень перегруженную лишними параметрами
 
-from termcolor import colored
+from termcolor import cprint
 from mastermind_engine import pick_secret_number, check_secret_number, check_user_number
 
 user_number = ""
@@ -60,15 +62,15 @@ secret_number = pick_secret_number()
 user_turn = 0
 bulls_and_cows = [0, 0]
 
-print(colored('Я загадал 4-значное число (первая цифра не ноль, все цифры уникальны).', 'green'))
-print(colored('Попробуешь угадать?', 'green'))
+cprint('Я загадал 4-значное число (первая цифра не ноль, все цифры уникальны).', color='green')
+cprint('Попробуешь угадать?', color='green')
 
 while not bulls_and_cows[0] == 4:
     user_turn += 1
     while check_user_number(user_number) is False:
         user_number = input('Попытка №{0}: '.format(user_turn))
     bulls_and_cows = check_secret_number(user_number)
-    print('Быков: {0}, коров: {1}'.format(*bulls_and_cows))
+    cprint('Быков: {0}, коров: {1}'.format(*bulls_and_cows), color='yellow')
     user_number = ""
 else:
-    print('Побeда! Ходов сделано: {0}.'.format(user_turn))
+    cprint('Побeда! Ходов сделано: {0}.'.format(user_turn), color='magenta')
