@@ -6,6 +6,11 @@ secret_number = []
 
 def pick_secret_number():
     global secret_number
+    # TODO Можно упростить заводим бесконечный цикл
+    # TODO final_result присваиваем строку в которой randint(1000, 9999)
+    # TODO Потом проверяем если set этой строки без дублей, (и прочекать длину)
+    # TODO то выходим из цикла
+    # TODO и возвращаем нужный нам результат
     secret_digit = randint(1, 9)
     secret_number.append(secret_digit)
     for digit in range(2, 5):
@@ -13,6 +18,7 @@ def pick_secret_number():
             secret_digit = randint(0, 9)
         else:
             secret_number.append(secret_digit)
+    print(secret_number)
     return secret_number
 
 
