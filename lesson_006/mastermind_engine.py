@@ -1,38 +1,33 @@
 # -*- coding: utf-8 -*-
 from random import randint
+from termcolor import cprint
 
-secret_number = []
+secret_number = None
 
 
 def pick_secret_number():
     global secret_number
-    # TODO Можно упростить заводим бесконечный цикл
-    # TODO final_result присваиваем строку в которой randint(1000, 9999)
-    # TODO Потом проверяем если set этой строки без дублей, (и прочекать длину)
-    # TODO то выходим из цикла
-    # TODO и возвращаем нужный нам результат
-    secret_digit = randint(1, 9)
-    secret_number.append(secret_digit)
-    for digit in range(2, 5):
-        while secret_digit in secret_number:
-            secret_digit = randint(0, 9)
-        else:
-            secret_number.append(secret_digit)
+    secret_number_list = [0]
+    secret_number_set = {}
+    while not len(secret_number_list) == len(secret_number_set):
+        secret_number = randint(1000, 9999)
+        secret_number_list = list(map(int, str(secret_number)))
+        secret_number_set = set(secret_number_list)
     print(secret_number)
-    return secret_number
 
 
 def check_secret_number(user_number):
     user_number_as_digits = list(map(int, user_number))
-    bulls, cows = 0, 0
+    secret_number_as_digits = list(map(int, str(secret_number)))
+    bulls_and_cows = {'bulls': 0, 'cows': 0}
     for digit in range(0, 4):
-        if user_number_as_digits[digit] in secret_number:
-            cows += 1
+        if user_number_as_digits[digit] in secret_number_as_digits:
+            bulls_and_cows['cows'] += 1
     for digit in range(0, 4):
-        if user_number_as_digits[digit] == secret_number[digit]:
-            bulls += 1
-    cows -= bulls
-    return bulls, cows
+        if user_number_as_digits[digit] == secret_number_as_digits[digit]:
+            bulls_and_cows['bulls'] += 1
+    bulls_and_cows['cows'] -= bulls_and_cows['bulls']
+    return bulls_and_cows
 
 
 def check_user_number(user_number):
@@ -41,3 +36,14 @@ def check_user_number(user_number):
         user_number_set = set(user_number_list)
         return len(user_number_list) == len(user_number_set)
     return False
+
+
+def end_game(user_turn):
+    cprint('Побeда! Ходов сделано: {0}.'.format(user_turn), color='magenta')
+
+
+def check_to_win(bulls):
+    if bulls == 4:
+        return True
+    else:
+        return False

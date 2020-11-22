@@ -45,36 +45,39 @@
 # Точнее, в этом случае важен принцип единственной ответственности - https://goo.gl/rYb3hT
 
 from termcolor import cprint
-from mastermind_engine import pick_secret_number, check_secret_number, check_user_number
+from mastermind_engine import pick_secret_number, check_secret_number, check_user_number, check_to_win, end_game
 
-user_number = ""
-secret_number = pick_secret_number()
+continue_game = ['yes', 'y', 'да', 'д']
 user_turn = 0
-bulls_and_cows = [0, 0]
+secret_number = pick_secret_number()
+
+
+def input_user_number():
+    global user_number
+    while not check_user_number(user_number):
+        user_number = input('Попытка №{0}: '.format(user_turn))
+
+
+def question_to_continue():
+    user_continue_game = input('Сыграем ещё? [y/n] ')
+    if not user_continue_game in continue_game:
+        print('До новых встреч!')
+        exit(0)
+
 
 cprint('Я загадал 4-значное число (первая цифра не ноль, все цифры уникальны).', color='green')
 cprint('Попробуешь угадать?', color='green')
 
-while not bulls_and_cows[0] == 4:
+while True:
+    user_number = ''
     user_turn += 1
-    # TODO вынесем эту часть в отдельную функцию выше, is False не пишут, используйте приставку not перед условием
-    while check_user_number(user_number) is False:
-        user_number = input('Попытка №{0}: '.format(user_turn))
+    input_user_number()
     bulls_and_cows = check_secret_number(user_number)
-    cprint('Быков: {0}, коров: {1}'.format(*bulls_and_cows), color='yellow')
-    user_number = ""
-else:
-    cprint('Побeда! Ходов сделано: {0}.'.format(user_turn), color='magenta')
-
-# TODO попробуйте написать функцию которая будет спрашивать у пользователя хочет ли он еще поиграть и онтегрировать ее
-# TODO в код
-
-# TODO Главный цикл должен будет выглядеть так примерно
-
-# TODO просим_ввести_число_корректное() - функция
-# TODO получаем данные из функции, которая чекает число на результат и возвращает словарь
-# TODO печатаем этот результат, тут тоже вызов функции() и запись в переменную
-# TODO увеличиваем число ходов - тут простой счетчик
-# TODO условие на победу и новую иру в виде двух функций:
-# TODO Если выиграли_игру(): - функция
-# TODO    новая_игра() - функция
+    cprint('Быков: {0}, коров: {1}'.format(bulls_and_cows['bulls'], bulls_and_cows['cows']), color='yellow')
+    win_game = check_to_win(bulls_and_cows['bulls'])
+    if win_game is True:
+        end_game(user_turn)
+        question_to_continue()
+        secret_number = pick_secret_number()
+        user_turn = 0
+        cprint('Я загадал ещё одно 4-значное число.', color='green')
