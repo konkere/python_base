@@ -60,6 +60,7 @@ def input_user_number():
 
 def question_to_continue():
     user_continue_game = input('Сыграем ещё? [y/n] ')
+    # TODO пайчарм подсказал ошибку в написание
     if not user_continue_game in continue_game:
         print('До новых встреч!')
         exit(0)
@@ -75,9 +76,13 @@ while True:
     bulls_and_cows = check_secret_number(user_number)
     cprint('Быков: {0}, коров: {1}'.format(bulls_and_cows['bulls'], bulls_and_cows['cows']), color='yellow')
     win_game = check_to_win(bulls_and_cows['bulls'])
+    # TODO старайтесь так не писать win_game is True, правильно if win_game:
+    #  если нужно отловить false тогда -> if not win_game:
     if win_game is True:
         end_game(user_turn)
         question_to_continue()
         secret_number = pick_secret_number()
         user_turn = 0
         cprint('Я загадал ещё одно 4-значное число.', color='green')
+
+# TODO а так все отлично, правим мелкие недочеты и зачет.

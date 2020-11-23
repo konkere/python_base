@@ -4,6 +4,10 @@ from termcolor import cprint
 
 secret_number = None
 
+# TODO list set dict tuple и так далее зарезервированные слова использовать их не рекомендуется в названии
+# TODO подробнее в FAQ
+# TODO Поправить нейминг по коду.
+
 
 def pick_secret_number():
     global secret_number
@@ -13,7 +17,7 @@ def pick_secret_number():
         secret_number = randint(1000, 9999)
         secret_number_list = list(map(int, str(secret_number)))
         secret_number_set = set(secret_number_list)
-    print(secret_number)
+    # print(secret_number)
 
 
 def check_secret_number(user_number):
@@ -38,6 +42,7 @@ def check_user_number(user_number):
     return False
 
 
+# TODO тут у нас общение с пользователем в главный модуль
 def end_game(user_turn):
     cprint('Побeда! Ходов сделано: {0}.'.format(user_turn), color='magenta')
 
