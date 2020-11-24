@@ -85,3 +85,6 @@ while True:
         secret_number = pick_secret_number()
         user_turn = 0
         cprint('Я загадал ещё одно 4-значное число.', color='green')
+
+
+# зачет!
