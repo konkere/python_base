@@ -14,8 +14,10 @@ speed = 10
 
 
 class Snowflake:
-
+    # TODO предлагаю ничего не принимать на вход
     def __init__(self, x, y, length):
+        # TODO сделать код самодостаточным, определять рендомные значения в момент инициализации экземпляра класса
+        # TODO не используя переменные из глобального скоупа
         self.x = x
         self.y = y
         self.length = length
@@ -26,6 +28,8 @@ class Snowflake:
         sd.snowflake(center=snowlake_center, length=self.length, color=sd.background_color)
 
     def move(self):
+        # TODO тут использовать метод, может_падать, если может то двигать икс и игрик
+        # TODO от куда у нас в классе появилось speed?
         self.y -= speed
 
     def draw(self):
@@ -33,6 +37,7 @@ class Snowflake:
         sd.snowflake(center=snowlake_center, length=self.length, color=self.color)
 
     def can_fall(self):
+        # TODO напрашивается запись return self.y > 50
         if self.y > 50:
             return True
 
@@ -48,6 +53,8 @@ while True:
     sd.sleep(0.1)
     if sd.user_want_exit():
         break
+
+# TODO вторую часть перенесите сюда уже доработанную по ТУДУ выше
 
 # шаг 2: создать снегопад - список объектов Снежинка в отдельном списке, обработку примерно так:
 # flakes = get_flakes(count=N)  # создать список снежинок
