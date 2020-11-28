@@ -4,6 +4,8 @@
 # Реализовать следующие элементы: Вода, Воздух, Огонь, Земля, Шторм, Пар, Грязь, Молния, Пыль, Лава.
 # Каждый элемент организовать как отдельный класс.
 # Таблица преобразований:
+
+# TODO у нас должно быть на много больше классов-элементов
 #   Вода + Воздух = Шторм
 #   Вода + Огонь = Пар
 #   Вода + Земля = Грязь
@@ -41,7 +43,9 @@ class Air:
         return 'Воздух'
 
     def __add__(self, extra_element):
+        # TODO поробуйте переписать логику так чтобы воспользоваться функцией isinstance()
         if extra_element is element_water:
+            # TODO а возвращать не строку а сам класс Шторм() в котором будет определен метод str
             return 'Шторм'
         elif extra_element is element_fire:
             return 'Молния'
@@ -109,6 +113,7 @@ def user_choice(welcome_txt):
 
 
 first_element = second_element = None
+
 
 element_water = Water()
 element_air = Air()
