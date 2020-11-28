@@ -45,6 +45,7 @@ class Man:
             self.fullness += 10
             self.house.food -= 10
         else:
+            # TODO уменьшаем сытость
             cprint('{} нет еды'.format(self.name), color='red')
 
     def work(self):
@@ -71,10 +72,12 @@ class Man:
             self.house.money -= 50
             self.house.catfood += 50
         else:
+            # TODO информируем а то консоль будет пустой
             # cprint('{} деньги кончились!'.format(self.name), color='red')
             self.work()
 
     def houseclean(self):
+        # TODO делаем проверку если в доме грязи больше 100, то убираемся -100, если меньше то убираем то что есть.
         cprint('{} убрался в доме'.format(self.name), color='blue')
         self.house.dirt -= 100
         self.fullness -= 20
@@ -92,6 +95,7 @@ class Man:
         cprint('{} въехал в дом'.format(self.name), color='cyan')
 
     def act(self):
+        # TODO выносим в отдельный метод и будем чекать его в главном цикле в конце фор
         if self.fullness <= 0:
             cprint('{} умер...'.format(self.name), color='red')
             return
@@ -100,6 +104,8 @@ class Man:
             self.eat()
         elif self.house.food < 10 * len(citizens):
             self.shopping()
+        # TODO если у нас котов не будет то и цикл не должен сработать
+        # TODO если нам необходимо количество котов то можно принимать из вне параметр длинны списка
         elif self.house.cats > 0 and self.house.catfood < 10 * self.house.cats:
             self.petshopping()
         elif self.house.money < 50:
@@ -110,6 +116,7 @@ class Man:
             self.work()
         elif dice == 2:
             self.eat()
+        # TODO len(cat_family) этот параметр мы должны принимать извне.
         elif self.house.cats < len(cat_family) and dice == 3:
             self.shelter_cat()
         else:
@@ -147,6 +154,7 @@ class Cat:
         cprint('{} весь день драл обои и портил мебель'.format(self.name), color='green')
 
     def act(self):
+        # TODO выносим в отдельный метод и чекаем его в главном цикле в конце цикла фор
         if self.fullness <= 0:
             cprint('{} умер...'.format(self.name), color='red')
             return
@@ -155,6 +163,7 @@ class Cat:
             self.eat()
         # elif self.house.dirt <= 100:
         #     self.spoil_things()
+        # TODO только один дисе задействуем
         elif dice == 1 or dice == 2:
             self.spoil_things()
         elif dice == 3:
@@ -162,6 +171,7 @@ class Cat:
         else:
             self.sleep()
 
+    # TODO кот не может себя добавить в дом это делает человек
     def go_to_the_house(self, house):
         self.house = house
         self.fullness -= 10
@@ -171,6 +181,7 @@ class House:
 
     def __init__(self):
         self.food = 50
+        # TODO по идеи у дома не может быть параметра коты, мы же людей не считаем!
         self.cats = 0
         self.catfood = 0
         self.money = 0
@@ -202,11 +213,14 @@ my_sweet_home = House()
 for citisen in citizens:
     citisen.go_to_the_house(house=my_sweet_home)
 
+# TODO заселяем котов также как людей через цикл
+
 for day in range(1, 366):
     print('================ день {} =================='.format(day))
     for citisen in citizens:
         citisen.act()
     for cat in cat_family:
+        # TODO эта проверка должна уйти
         if cat.house:
             cat.act()
     print('--- в конце дня ---')
