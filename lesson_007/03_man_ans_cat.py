@@ -45,7 +45,7 @@ class Man:
             self.fullness += 10
             self.house.food -= 10
         else:
-            # TODO уменьшаем сытость
+            self.fullness -= 10
             cprint('{} нет еды'.format(self.name), color='red')
 
     def work(self):
@@ -63,7 +63,7 @@ class Man:
             self.house.money -= 50
             self.house.food += 50
         else:
-            # cprint('{} деньги кончились!'.format(self.name), color='red')
+            cprint('{} деньги кончились! Придётся идти работать.'.format(self.name), color='red')
             self.work()
 
     def petshopping(self):
@@ -73,54 +73,61 @@ class Man:
             self.house.catfood += 50
         else:
             # TODO информируем а то консоль будет пустой
-            # cprint('{} деньги кончились!'.format(self.name), color='red')
+            # Пустой не будет, он же работать пойдёт, если денег не хватает.
+            cprint('{} деньги кончились! Придётся идти работать.'.format(self.name), color='red')
             self.work()
 
     def houseclean(self):
-        # TODO делаем проверку если в доме грязи больше 100, то убираемся -100, если меньше то убираем то что есть.
         cprint('{} убрался в доме'.format(self.name), color='blue')
-        self.house.dirt -= 100
+        if self.house.dirt > 99:
+            self.house.dirt -= 100
+        else:
+            self.house.dirt = 0
         self.fullness -= 20
 
-    def shelter_cat(self):
-        if self.house.cats < len(cat_family):
-            pickup_cat = cat_family[self.house.cats]
-            pickup_cat.go_to_the_house(self.house)
+    def shelter_cat(self, cats, max_cats):
+        if cats < max_cats:
+            pickup_cat = cat_family[cats]
+            pickup_cat.house = self.house
+            pickup_cat.fullness -= 10
             cprint('{} подобрал кота и назвал его — {}'.format(self.name, pickup_cat.name), color='cyan')
-            self.house.cats += 1
+            cats += 1
+            return cats
 
     def go_to_the_house(self, house):
         self.house = house
         self.fullness -= 10
         cprint('{} въехал в дом'.format(self.name), color='cyan')
 
-    def act(self):
-        # TODO выносим в отдельный метод и будем чекать его в главном цикле в конце фор
-        if self.fullness <= 0:
-            cprint('{} умер...'.format(self.name), color='red')
-            return
+    def act(self, people, cats, max_cats):
         dice = randint(1, 6)
         if self.fullness <= 20:
             self.eat()
-        elif self.house.food < 10 * len(citizens):
+        elif self.house.food < 10 * people:
             self.shopping()
-        # TODO если у нас котов не будет то и цикл не должен сработать
-        # TODO если нам необходимо количество котов то можно принимать из вне параметр длинны списка
-        elif self.house.cats > 0 and self.house.catfood < 10 * self.house.cats:
+        elif cats > 0 and self.house.catfood < 10 * cats:
             self.petshopping()
         elif self.house.money < 50:
             self.work()
-        elif self.house.dirt >= 100:
+        elif self.house.dirt >= 200:
             self.houseclean()
         elif dice == 1:
             self.work()
         elif dice == 2:
             self.eat()
-        # TODO len(cat_family) этот параметр мы должны принимать извне.
-        elif self.house.cats < len(cat_family) and dice == 3:
-            self.shelter_cat()
+        elif cats < max_cats and dice == 3:
+            cats=self.shelter_cat(cats, max_cats)
+        elif self.house.dirt > 0 and dice == 4:
+            self.houseclean()
         else:
             self.watch_MTV()
+        return cats
+
+    def dead(self):
+        dead = (self.fullness <= 0)
+        if dead:
+            cprint('{} умер...'.format(self.name), color='red')
+        return dead
 
 
 class Cat:
@@ -141,7 +148,8 @@ class Cat:
             self.fullness += 20
             self.house.catfood -= 10
         else:
-            # cprint('{} нет кошачьего корма!'.format(self.name), color='red')
+            cprint('{} нет кошачьего корма! Хотел поесть, но обиделся и пошёл проказничать.'.format(self.name),
+                   color='red')
             self.spoil_things()
 
     def sleep(self):
@@ -154,35 +162,27 @@ class Cat:
         cprint('{} весь день драл обои и портил мебель'.format(self.name), color='green')
 
     def act(self):
-        # TODO выносим в отдельный метод и чекаем его в главном цикле в конце цикла фор
-        if self.fullness <= 0:
-            cprint('{} умер...'.format(self.name), color='red')
-            return
         dice = randint(1, 6)
         if self.fullness < 20:
             self.eat()
-        # elif self.house.dirt <= 100:
-        #     self.spoil_things()
-        # TODO только один дисе задействуем
-        elif dice == 1 or dice == 2:
+        elif dice == 1:
             self.spoil_things()
-        elif dice == 3:
+        elif dice == 2:
             self.eat()
         else:
             self.sleep()
 
-    # TODO кот не может себя добавить в дом это делает человек
-    def go_to_the_house(self, house):
-        self.house = house
-        self.fullness -= 10
+    def dead(self):
+        dead = (self.fullness <= 0)
+        if dead:
+            cprint('{} умер...'.format(self.name), color='red')
+        return dead
 
 
 class House:
 
     def __init__(self):
         self.food = 50
-        # TODO по идеи у дома не может быть параметра коты, мы же людей не считаем!
-        self.cats = 0
         self.catfood = 0
         self.money = 0
         self.dirt = 0
@@ -200,28 +200,32 @@ citizens = [
 ]
 
 cat_family = [
-    # 101 правило Блэк-металиста http://russrock.ru/umor/1098-101-pravilo-bljek-metalista.html
-    # п.74. Любой домашний питомец, который живет у тебя дома, должен носить кличку "Палач". Любой домашний питомец,
-    # которого ты захочешь завести в будущем, все равно должен носить кличку "Палач".
     Cat(name='Палач'),
     Cat(name='Нюхач'),
     Cat(name='Котозавр'),
     # Cat(name='Васька')
 ]
 
+cats_in_house = 0
+max_cats_in_house = len(cat_family)
+citizens_in_house = len(citizens)
+
 my_sweet_home = House()
 for citisen in citizens:
     citisen.go_to_the_house(house=my_sweet_home)
 
 # TODO заселяем котов также как людей через цикл
+# Всех? За раз? В первый же день? Это же как-то совсем не правдоподобно.
 
 for day in range(1, 366):
     print('================ день {} =================='.format(day))
     for citisen in citizens:
-        citisen.act()
+        if not citisen.dead():
+            cats_in_house = citisen.act(citizens_in_house, cats_in_house, max_cats_in_house)
     for cat in cat_family:
         # TODO эта проверка должна уйти
-        if cat.house:
+        # Если не будем вселять всех котов за раз, то придётся проверять, в доме ли они уже.
+        if cat.house and not cat.dead():
             cat.act()
     print('--- в конце дня ---')
     for citisen in citizens:
