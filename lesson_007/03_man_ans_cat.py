@@ -213,6 +213,9 @@ for cat in cat_family:
     rnd_citizen = randint(0, citizens_in_house - 1)
     citizens[rnd_citizen].shelter_cat(cat)
 
+# тогда заводим еще одну переменную потому что day не определена за пределами цикла
+day_out = 0
+
 for day in range(1, 366):
     print('================ день {} =================='.format(day))
     for citizen in citizens:
@@ -232,15 +235,17 @@ for day in range(1, 366):
     for cat in cat_family:
         if cat.dead():
             death_in_house = True
+
+    day_out = day
     if death_in_house:
         break
+
 if death_in_house:
-    cprint('--============= Мы очень старались, но сумели протянуть только {} дн. =============--'.format(day - 1),
+    cprint('--============= Мы очень старались, но сумели протянуть только {} дн. =============--'.format(day_out - 1),
            color='green', on_color='on_red')
 else:
-    cprint('--============= Победа! Мы прожили {} дней! =============--'.format(day),
+    cprint('--============= Победа! Мы прожили {} дней! =============--'.format(day_out),
            color='red', on_color='on_green')
-
 
 
 # Усложненное задание (делать по желанию)
@@ -248,3 +253,5 @@ else:
 # Им всем вместе так же надо прожить 365 дней.
 
 # (Можно определить критическое количество котов, которое может прокормить человек...)
+
+# зачет!
