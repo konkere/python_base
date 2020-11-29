@@ -72,7 +72,6 @@ class Man:
             self.house.money -= 50
             self.house.catfood += 50
         else:
-            # TODO информируем а то консоль будет пустой
             # Пустой не будет, он же работать пойдёт, если денег не хватает.
             cprint('{} деньги кончились! Придётся идти работать.'.format(self.name), color='red')
             self.work()
@@ -85,6 +84,9 @@ class Man:
             self.house.dirt = 0
         self.fullness -= 20
 
+    # TODO предлагаю не усложнять, суть этого метода что он на вход принимает экземпляр кота,
+    # TODO проверяет есть ли у человека дом, и вселяет его в этот же дом, и все ничего не возвращает.
+    # TODO + принт что код вселился в дом.
     def shelter_cat(self, cats, max_cats):
         if cats < max_cats:
             pickup_cat = cat_family[cats]
@@ -115,8 +117,11 @@ class Man:
             self.work()
         elif dice == 2:
             self.eat()
+        # TODO заселять будем до главного цикла сразу
         elif cats < max_cats and dice == 3:
             cats=self.shelter_cat(cats, max_cats)
+        # TODO эту часть упрощаем, dice == 4: - отдельно без проверки на грязь, а в методе уже делать проверку
+        # TODO сколько грязи на данный момент.
         elif self.house.dirt > 0 and dice == 4:
             self.houseclean()
         else:
@@ -214,23 +219,29 @@ my_sweet_home = House()
 for citisen in citizens:
     citisen.go_to_the_house(house=my_sweet_home)
 
-# TODO заселяем котов также как людей через цикл
-# Всех? За раз? В первый же день? Это же как-то совсем не правдоподобно.
+# TODO задача, косвенно вычислить сколько котов с первого дня сможет уживаться с человеком.
+
+# TODO Допустим чисто гипотетически ситуацию, мы зашли в зоомагазин или увидели коробку с котятами
+# TODO там их как у вас в списке 3-4 кота.
+# TODO И мы их сразу берем и заселяем в дом.
 
 for day in range(1, 366):
     print('================ день {} =================='.format(day))
+    # TODO первым циклом мы проходим и просто действуем, проверку на жизнь мы будем делать отдельным циклом
+    # TODO в конце цикла for day in range(1, 366)
+    # TODO так сказать в конце дня.
     for citisen in citizens:
         if not citisen.dead():
             cats_in_house = citisen.act(citizens_in_house, cats_in_house, max_cats_in_house)
     for cat in cat_family:
-        # TODO эта проверка должна уйти
-        # Если не будем вселять всех котов за раз, то придётся проверять, в доме ли они уже.
+        # TODO аналогично и тут проверку на dead() в делаем отдельным циклом в конце главного цикла, в конце дня.
         if cat.house and not cat.dead():
             cat.act()
     print('--- в конце дня ---')
     for citisen in citizens:
         print(citisen)
     for cat in cat_family:
+        # TODO у кота по факту уже должен быть дом если мы его тут чекаем.
         if cat.house:
             print(cat)
     print(my_sweet_home)
