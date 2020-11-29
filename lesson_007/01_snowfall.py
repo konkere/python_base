@@ -7,21 +7,14 @@ import simple_draw as sd
 #  - отработку изменений координат
 #  - отрисовку
 
-resolution_x = 1000
-resolution_y = 800
-sd.resolution = (resolution_x, resolution_y)
-flakes = []
-
 
 class Snowflake:
-    # TODO сделайте их параметрами класса, а не экземпляра.
+    resolution_x = 1000
+    resolution_y = 800
 
     def __init__(self):
-        # TODO ответ выше
-        # Мне всё равно понадобятся значения размера экрана для генерации.
-        # Может их стоит передавать при создании объекта? Если нет, то получится вот так:
-        self.x = sd.randint(0, resolution_x)
-        self.y = sd.randint(resolution_y, resolution_y + 200)
+        self.x = sd.randint(0, self.resolution_x)
+        self.y = sd.randint(self.resolution_y, self.resolution_y + 200)
         self.length = sd.randint(10, 50)
         self.color = sd.COLOR_WHITE
         self.speed = 10
@@ -77,7 +70,8 @@ def get_fallen_flakes():
 #     if sd.user_want_exit():
 #         break
 
-
+sd.resolution = (Snowflake.resolution_x, Snowflake.resolution_y)
+flakes = []
 get_snowflakes(count=50)
 
 while True:
