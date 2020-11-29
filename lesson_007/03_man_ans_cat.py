@@ -85,8 +85,10 @@ class Man:
         self.fullness -= 20
 
     def shelter_cat(self, cat):
-        cat.house = self.house
-        self.fullness -= 10
+        # забыли сделать проверку
+        if self.house:
+            cat.house = self.house
+            self.fullness -= 10
         cprint('{} подобрал кота и назвал его — {}'.format(self.name, cat.name), color='cyan')
 
     def go_to_the_house(self, house):
@@ -224,12 +226,19 @@ for day in range(1, 366):
     # Проверим, все ли пережили этот день
     for citizen in citizens:
         if citizen.dead():
+            # TODO удалять мы некого не должны, а задача у анс остановить главный цикл day in range(1, 366)
+            #  используя break, но если его тут написать он выйдет только из первого цикла!
+            #   нужно придумать как это решить
             citizens.remove(citizen)
             citizens_in_house -= 1
     for cat in cat_family:
         if cat.dead():
+            # TODO аналогично
             cat_family.remove(cat)
             cats_in_house -= 1
+
+
+# TODO считается если они выживает 70 на 30% из 10 запусков, то выживаю если нет то нужно закоментить одного кота.
 
 # Усложненное задание (делать по желанию)
 # Создать несколько (2-3) котов и подселить их в дом к человеку.
