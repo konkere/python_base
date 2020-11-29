@@ -86,10 +86,11 @@ class Man:
 
     def shelter_cat(self, cat):
         # забыли сделать проверку
+        # А эта проверка для чего? Задел на будущее? При текущем коде self.house всегда будет True
         if self.house:
             cat.house = self.house
             self.fullness -= 10
-        cprint('{} подобрал кота и назвал его — {}'.format(self.name, cat.name), color='cyan')
+            cprint('{} подобрал кота и назвал его — {}'.format(self.name, cat.name), color='cyan')
 
     def go_to_the_house(self, house):
         self.house = house
@@ -100,9 +101,9 @@ class Man:
         dice = randint(1, 6)
         if self.fullness <= 20:
             self.eat()
-        elif self.house.food < 10 * people:
+        elif self.house.food <= 10 * people:
             self.shopping()
-        elif self.house.catfood < 10 * cats:
+        elif self.house.catfood <= 10 * cats:
             self.petshopping()
         elif self.house.money < 50:
             self.work()
@@ -195,15 +196,16 @@ cat_family = [
     Cat(name='Палач'),
     Cat(name='Нюхач'),
     Cat(name='Котозавр'),
-    # Cat(name='Гарфилд'),
+    Cat(name='Гарфилд'),
     # Cat(name='Том'),
     # Cat(name='Васька'),
 ]
 
 cats_in_house = len(cat_family)
 citizens_in_house = len(citizens)
-
+death_in_house = False
 my_sweet_home = House()
+
 for citizen in citizens:
     citizen.go_to_the_house(house=my_sweet_home)
 
@@ -226,19 +228,20 @@ for day in range(1, 366):
     # Проверим, все ли пережили этот день
     for citizen in citizens:
         if citizen.dead():
-            # TODO удалять мы некого не должны, а задача у анс остановить главный цикл day in range(1, 366)
-            #  используя break, но если его тут написать он выйдет только из первого цикла!
-            #   нужно придумать как это решить
-            citizens.remove(citizen)
-            citizens_in_house -= 1
+            death_in_house = True
     for cat in cat_family:
         if cat.dead():
-            # TODO аналогично
-            cat_family.remove(cat)
-            cats_in_house -= 1
+            death_in_house = True
+    if death_in_house:
+        break
+if death_in_house:
+    cprint('--============= Мы очень старались, но сумели протянуть только {} дн. =============--'.format(day - 1),
+           color='green', on_color='on_red')
+else:
+    cprint('--============= Победа! Мы прожили {} дней! =============--'.format(day),
+           color='red', on_color='on_green')
 
 
-# TODO считается если они выживает 70 на 30% из 10 запусков, то выживаю если нет то нужно закоментить одного кота.
 
 # Усложненное задание (делать по желанию)
 # Создать несколько (2-3) котов и подселить их в дом к человеку.
