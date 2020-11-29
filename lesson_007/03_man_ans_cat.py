@@ -46,7 +46,8 @@ class Man:
             self.house.food -= 10
         else:
             self.fullness -= 10
-            cprint('{} нет еды'.format(self.name), color='red')
+            cprint('{} нет еды. Надо идти в магазин.'.format(self.name), color='red')
+            self.shopping()
 
     def work(self):
         cprint('{} сходил на работу'.format(self.name), color='blue')
@@ -72,7 +73,6 @@ class Man:
             self.house.money -= 50
             self.house.catfood += 50
         else:
-            # Пустой не будет, он же работать пойдёт, если денег не хватает.
             cprint('{} деньги кончились! Придётся идти работать.'.format(self.name), color='red')
             self.work()
 
@@ -84,49 +84,34 @@ class Man:
             self.house.dirt = 0
         self.fullness -= 20
 
-    # TODO предлагаю не усложнять, суть этого метода что он на вход принимает экземпляр кота,
-    # TODO проверяет есть ли у человека дом, и вселяет его в этот же дом, и все ничего не возвращает.
-    # TODO + принт что код вселился в дом.
-    def shelter_cat(self, cats, max_cats):
-        if cats < max_cats:
-            pickup_cat = cat_family[cats]
-            pickup_cat.house = self.house
-            pickup_cat.fullness -= 10
-            cprint('{} подобрал кота и назвал его — {}'.format(self.name, pickup_cat.name), color='cyan')
-            cats += 1
-            return cats
+    def shelter_cat(self, cat):
+        cat.house = self.house
+        self.fullness -= 10
+        cprint('{} подобрал кота и назвал его — {}'.format(self.name, cat.name), color='cyan')
 
     def go_to_the_house(self, house):
         self.house = house
         self.fullness -= 10
         cprint('{} въехал в дом'.format(self.name), color='cyan')
 
-    def act(self, people, cats, max_cats):
+    def act(self, people, cats):
         dice = randint(1, 6)
         if self.fullness <= 20:
             self.eat()
         elif self.house.food < 10 * people:
             self.shopping()
-        elif cats > 0 and self.house.catfood < 10 * cats:
+        elif self.house.catfood < 10 * cats:
             self.petshopping()
         elif self.house.money < 50:
             self.work()
-        elif self.house.dirt >= 200:
-            self.houseclean()
         elif dice == 1:
             self.work()
         elif dice == 2:
             self.eat()
-        # TODO заселять будем до главного цикла сразу
-        elif cats < max_cats and dice == 3:
-            cats=self.shelter_cat(cats, max_cats)
-        # TODO эту часть упрощаем, dice == 4: - отдельно без проверки на грязь, а в методе уже делать проверку
-        # TODO сколько грязи на данный момент.
-        elif self.house.dirt > 0 and dice == 4:
+        elif dice == 3:
             self.houseclean()
         else:
             self.watch_MTV()
-        return cats
 
     def dead(self):
         dead = (self.fullness <= 0)
@@ -208,43 +193,43 @@ cat_family = [
     Cat(name='Палач'),
     Cat(name='Нюхач'),
     Cat(name='Котозавр'),
-    # Cat(name='Васька')
+    # Cat(name='Гарфилд'),
+    # Cat(name='Том'),
+    # Cat(name='Васька'),
 ]
 
-cats_in_house = 0
-max_cats_in_house = len(cat_family)
+cats_in_house = len(cat_family)
 citizens_in_house = len(citizens)
 
 my_sweet_home = House()
-for citisen in citizens:
-    citisen.go_to_the_house(house=my_sweet_home)
+for citizen in citizens:
+    citizen.go_to_the_house(house=my_sweet_home)
 
-# TODO задача, косвенно вычислить сколько котов с первого дня сможет уживаться с человеком.
-
-# TODO Допустим чисто гипотетически ситуацию, мы зашли в зоомагазин или увидели коробку с котятами
-# TODO там их как у вас в списке 3-4 кота.
-# TODO И мы их сразу берем и заселяем в дом.
+for cat in cat_family:
+    rnd_citizen = randint(0, citizens_in_house - 1)
+    citizens[rnd_citizen].shelter_cat(cat)
 
 for day in range(1, 366):
     print('================ день {} =================='.format(day))
-    # TODO первым циклом мы проходим и просто действуем, проверку на жизнь мы будем делать отдельным циклом
-    # TODO в конце цикла for day in range(1, 366)
-    # TODO так сказать в конце дня.
-    for citisen in citizens:
-        if not citisen.dead():
-            cats_in_house = citisen.act(citizens_in_house, cats_in_house, max_cats_in_house)
+    for citizen in citizens:
+        citizen.act(citizens_in_house, cats_in_house)
     for cat in cat_family:
-        # TODO аналогично и тут проверку на dead() в делаем отдельным циклом в конце главного цикла, в конце дня.
-        if cat.house and not cat.dead():
-            cat.act()
+        cat.act()
     print('--- в конце дня ---')
-    for citisen in citizens:
-        print(citisen)
+    for citizen in citizens:
+        print(citizen)
     for cat in cat_family:
-        # TODO у кота по факту уже должен быть дом если мы его тут чекаем.
-        if cat.house:
-            print(cat)
+        print(cat)
     print(my_sweet_home)
+    # Проверим, все ли пережили этот день
+    for citizen in citizens:
+        if citizen.dead():
+            citizens.remove(citizen)
+            citizens_in_house -= 1
+    for cat in cat_family:
+        if cat.dead():
+            cat_family.remove(cat)
+            cats_in_house -= 1
 
 # Усложненное задание (делать по желанию)
 # Создать несколько (2-3) котов и подселить их в дом к человеку.
