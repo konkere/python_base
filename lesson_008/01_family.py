@@ -55,6 +55,8 @@ class House:
             self.food, self.money, self.dirt
         )
 
+    # TODO Добавим метод который будет добавлять грязь в доме
+
 
 class Man:
     total_eaten = 0
@@ -97,6 +99,7 @@ class Man:
         depression = (self.happiness < 10)
         if starvation or depression:
             cprint('{} RIP...'.format(self.name), color='red')
+            # TODO можно упростить и сразу ретурнить True
             dead = True
         return dead
 
@@ -104,6 +107,7 @@ class Man:
 class Husband(Man):
     earn_money = 0
 
+    # TODO эти два метода нет необходимости переопределять, так как мы ничего нового не добавили
     def __init__(self, name):
         super().__init__(name=name)
 
@@ -111,13 +115,16 @@ class Husband(Man):
         return super().__str__()
 
     def act(self):
+        # TODO это вынесем в отдельный метод родительского класса и будем вызывать в цикле
         if self.house.dirt > 90:
             self.happiness -= 10
         dice = randint(1, 6)
+        # TODO наверное будет правильней сначала есть а потом работать
         if self.house.money < 50:
             self.work()
         elif self.fullness <= 20:
             self.eat()
+        # TODO эту часть мы оставим на волю случая, в dice у нас будет вызываться пока что работа и еда
         elif self.happiness < 20:
             self.gaming()
         elif dice == 1:
@@ -125,6 +132,7 @@ class Husband(Man):
         elif dice == 2:
             self.eat()
         else:
+            # TODO тут пусть лучше он играет
             self.work()
 
     def work(self):
@@ -142,6 +150,7 @@ class Husband(Man):
 class Wife(Man):
     bought_fur_coats = 0
 
+    # TODO аналогично ТУДУ от мужа
     def __init__(self, name):
         super().__init__(name=name)
 
@@ -149,13 +158,16 @@ class Wife(Man):
         return super().__str__()
 
     def act(self):
+        # TODO в отдельный метод
         if self.house.dirt > 90:
             self.happiness -= 10
         dice = randint(1, 6)
+        # TODO тут тоже пусть сначала сама поест па потом в магазин если нужно
         if self.house.food <= 30 * self.house.citizens:
             self.shopping()
         elif self.fullness <= 20:
             self.eat()
+        # TODO это тоже оставим на волю случая
         elif self.happiness < 20:
             self.buy_fur_coat()
         elif dice == 1:
@@ -165,9 +177,13 @@ class Wife(Man):
         elif dice == 3:
             self.buy_fur_coat()
         else:
+            # TODO если все хорошо и кубик не выпал ни на одно действие пусть пытается купить шубу!
+            # TODO clean_house() заключим в dice
             self.clean_house()
 
     def shopping(self):
+        # TODO интересный подход в этом методе как и с едой но нам нужны и фейл эфекты тоже, а там их будет
+        # TODO минимум, или почти не будет!
         dice_shopping = randint(50, 100)
         self.fullness -= 10
         if self.house.money >= dice_shopping:
@@ -185,6 +201,7 @@ class Wife(Man):
 
     def buy_fur_coat(self):
         self.fullness -= 10
+        # TODO на крайние не берем
         if self.house.money >= 350:
             self.happiness += 60
             self.house.money -= 350
