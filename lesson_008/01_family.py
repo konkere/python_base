@@ -55,7 +55,8 @@ class House:
             self.food, self.money, self.dirt
         )
 
-    # TODO Добавим метод который будет добавлять грязь в доме
+    def littering(self):
+        self.dirt += 5
 
 
 class Man:
@@ -88,52 +89,40 @@ class Man:
             self.fullness -= 10
             cprint('{} не может поесть. Нет еды.'.format(self.name), color='red')
 
+    def very_dirty(self):
+        if self.house.dirt > 90:
+            self.happiness -= 10
+            cprint('В доме очень грязно, {} грустит из-за этого.'.format(self.name), color='red')
+
     def go_to_the_house(self, house):
         self.house = house
         self.fullness -= 10
         cprint('{} теперь живёт в доме.'.format(self.name), color='cyan')
 
     def dead(self):
-        dead = False
         starvation = (self.fullness <= 0)
         depression = (self.happiness < 10)
         if starvation or depression:
             cprint('{} RIP...'.format(self.name), color='red')
-            # TODO можно упростить и сразу ретурнить True
-            dead = True
-        return dead
+            return True
+        return False
 
 
 class Husband(Man):
     earn_money = 0
 
-    # TODO эти два метода нет необходимости переопределять, так как мы ничего нового не добавили
-    def __init__(self, name):
-        super().__init__(name=name)
-
-    def __str__(self):
-        return super().__str__()
-
     def act(self):
-        # TODO это вынесем в отдельный метод родительского класса и будем вызывать в цикле
-        if self.house.dirt > 90:
-            self.happiness -= 10
         dice = randint(1, 6)
-        # TODO наверное будет правильней сначала есть а потом работать
-        if self.house.money < 50:
-            self.work()
-        elif self.fullness <= 20:
+        if self.fullness <= 20:
             self.eat()
-        # TODO эту часть мы оставим на волю случая, в dice у нас будет вызываться пока что работа и еда
-        elif self.happiness < 20:
-            self.gaming()
+        elif self.house.money < 100 * self.house.citizens:
+            self.work()
         elif dice == 1:
-            self.gaming()
+            self.work()
         elif dice == 2:
             self.eat()
         else:
-            # TODO тут пусть лучше он играет
-            self.work()
+            self.gaming()
 
     def work(self):
         cprint('{} сходил на работу.'.format(self.name), color='blue')
@@ -150,48 +139,30 @@ class Husband(Man):
 class Wife(Man):
     bought_fur_coats = 0
 
-    # TODO аналогично ТУДУ от мужа
-    def __init__(self, name):
-        super().__init__(name=name)
-
-    def __str__(self):
-        return super().__str__()
-
     def act(self):
-        # TODO в отдельный метод
-        if self.house.dirt > 90:
-            self.happiness -= 10
         dice = randint(1, 6)
-        # TODO тут тоже пусть сначала сама поест па потом в магазин если нужно
-        if self.house.food <= 30 * self.house.citizens:
-            self.shopping()
-        elif self.fullness <= 20:
+        if self.fullness <= 20:
             self.eat()
-        # TODO это тоже оставим на волю случая
-        elif self.happiness < 20:
-            self.buy_fur_coat()
+        elif self.house.food <= 30 * self.house.citizens:
+            self.shopping()
         elif dice == 1:
             self.eat()
         elif dice == 2:
             self.shopping()
         elif dice == 3:
-            self.buy_fur_coat()
-        else:
-            # TODO если все хорошо и кубик не выпал ни на одно действие пусть пытается купить шубу!
-            # TODO clean_house() заключим в dice
             self.clean_house()
+        else:
+            self.buy_fur_coat()
 
     def shopping(self):
-        # TODO интересный подход в этом методе как и с едой но нам нужны и фейл эфекты тоже, а там их будет
-        # TODO минимум, или почти не будет!
-        dice_shopping = randint(50, 100)
+        need_to_buy = 30 * self.house.citizens
         self.fullness -= 10
-        if self.house.money >= dice_shopping:
+        if self.house.money >= need_to_buy:
             cprint('{} сходила в магазин за едой, потратив {} денег.'.format(
-                self.name, dice_shopping), color='magenta')
-            self.house.money -= dice_shopping
-            self.house.food += dice_shopping
-        elif 0 < self.house.money < 50:
+                self.name, need_to_buy), color='magenta')
+            self.house.money -= need_to_buy
+            self.house.food += need_to_buy
+        elif 0 < self.house.money < need_to_buy:
             cprint('{} сходила в магазин за едой, потратив {} денег.'.format(
                 self.name, self.house.money), color='magenta')
             self.house.money -= self.house.money
@@ -201,19 +172,17 @@ class Wife(Man):
 
     def buy_fur_coat(self):
         self.fullness -= 10
-        # TODO на крайние не берем
-        if self.house.money >= 350:
+        if self.house.money > 350:
             self.happiness += 60
             self.house.money -= 350
             Wife.bought_fur_coats += 1
             cprint('{} купила шубу.'.format(self.name), color='magenta')
         else:
             cprint('Не хватило денег на шубу!'.format(self.name), color='red')
-            self.happiness -= 10
 
     def clean_house(self):
         self.fullness -= 10
-        cprint('{} убралася в доме'.format(self.name), color='blue')
+        cprint('{} убралась в доме'.format(self.name), color='blue')
         if self.house.dirt >= 100:
             self.house.dirt -= 100
         else:
@@ -235,9 +204,11 @@ day_out = 0
 
 for day in range(1, 366):
     cprint('================== День {} =================='.format(day), color='red')
+    serge.very_dirty()
+    masha.very_dirty()
     serge.act()
     masha.act()
-    home.dirt += 5
+    home.littering()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
     cprint(home, color='cyan')
@@ -259,7 +230,6 @@ cprint('За это время было заработано денег — {}, 
     Husband.earn_money, Man.total_eaten, Wife.bought_fur_coats), color='green')
 
 exit(0)
-# TODO после реализации первой части - отдать на проверку учителю
 
 ######################################################## Часть вторая
 #
