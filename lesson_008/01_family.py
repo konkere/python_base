@@ -172,12 +172,14 @@ class Wife(Man):
 
     def buy_fur_coat(self):
         self.fullness -= 10
+        # TODO как писал ранее на крайние не берем, будет 360 жена купит шубу и на покупку еды уже не будет
         if self.house.money > 350:
             self.happiness += 60
             self.house.money -= 350
             Wife.bought_fur_coats += 1
             cprint('{} купила шубу.'.format(self.name), color='magenta')
         else:
+            # TODO не забываем про счастье
             cprint('Не хватило денег на шубу!'.format(self.name), color='red')
 
     def clean_house(self):
@@ -229,6 +231,9 @@ else:
 cprint('За это время было заработано денег — {}, съедено еды — {}, куплено шуб — {}.'.format(
     Husband.earn_money, Man.total_eaten, Wife.bought_fur_coats), color='green')
 
+# TODO с новыми доработками одни должны жить стабильно 70 на 30 как минимум
+
+# TODO это потом уберите!
 exit(0)
 
 ######################################################## Часть вторая
