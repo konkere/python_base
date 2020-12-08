@@ -67,6 +67,7 @@ class Man:
         self.fullness = 30
         self.happiness = 100
         self.house = None
+        self.to_eat = [10, 30]
 
     def __str__(self):
         return 'Я — {}, сытость {}, счастье {}'.format(
@@ -74,7 +75,7 @@ class Man:
         )
 
     def eat(self):
-        dice_eat = randint(10, 30)
+        dice_eat = randint(*self.to_eat)
         if self.house.food >= dice_eat:
             cprint('{} кушает {} еды.'.format(self.name, dice_eat), color='yellow')
             self.fullness += dice_eat
@@ -156,9 +157,6 @@ class Wife(Man):
 
     def shopping(self):
         need_to_buy = 30 * self.house.citizens
-        # TODO просто у жены сильно много минусов, допустим что она любит покупать и тут ей присвоим +10
-        # TODO это сразу уравновешивает рендом даже в положительную сторону, если вы согласны, то можно приступать
-        # TODO ко второй части там если что еще подебажим алгоритм
         self.happiness += 10
         self.fullness -= 10
         if self.house.money >= need_to_buy:
@@ -194,11 +192,32 @@ class Wife(Man):
             self.house.dirt = 0
 
 
+class Child(Man):
+
+    def __init__(self, name):
+        super().__init__(name=name)
+        self.to_eat = [1, 10]
+
+    def act(self):
+        dice = randint(1, 2)
+        if self.fullness <= 10:
+            self.eat()
+        elif dice == 1:
+            self.sleep()
+        elif dice == 2:
+            self.eat()
+
+    def sleep(self):
+        self.fullness -= 10
+        cprint('{} спал целый день.'.format(self.name), color='magenta')
+
+
 home = House()
 serge = Husband(name='Серёжа')
 masha = Wife(name='Маша')
+kolya = Child(name='Коля')
 
-citizens = [serge, masha]
+citizens = [serge, masha, kolya]
 
 for citizen in citizens:
     citizen.go_to_the_house(house=home)
@@ -213,9 +232,11 @@ for day in range(1, 366):
     masha.very_dirty()
     serge.act()
     masha.act()
+    kolya.act()
     home.littering()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
+    cprint(kolya, color='cyan')
     cprint(home, color='cyan')
     # Проверим, все ли пережили этот день
     for citizen in citizens:
