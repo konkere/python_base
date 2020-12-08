@@ -49,10 +49,12 @@ class House:
         self.food = 50
         self.dirt = 0
         self.citizens = 0
+        self.cats = 0
+        self.catfood = 30
 
     def __str__(self):
-        return 'В доме еды осталось {}, денег осталось {}, грязи накопилось {}'.format(
-            self.food, self.money, self.dirt
+        return 'В доме еды осталось {}, кошачьего корма осталось {}, денег осталось {}, грязи накопилось {}'.format(
+            self.food, self.catfood, self.money, self.dirt
         )
 
     def littering(self):
@@ -89,6 +91,11 @@ class Man:
             self.fullness -= 10
             cprint('{} не может поесть. Нет еды.'.format(self.name), color='red')
 
+    def pet_the_cat(self):
+        self.happiness += 5
+        self.fullness -= 10
+        cprint('{} гладит кота.'.format(self.name), color='green')
+
     def very_dirty(self):
         if self.house.dirt > 90:
             self.happiness -= 10
@@ -98,6 +105,12 @@ class Man:
         self.house = house
         self.fullness -= 10
         cprint('{} теперь живёт в доме.'.format(self.name), color='cyan')
+
+    def shelter_cat(self, cat):
+        if self.house:
+            cat.house = self.house
+            self.fullness -= 10
+            cprint('{} подобрал кота и назвал его — {}'.format(self.name, cat.name), color='cyan')
 
     def dead(self):
         starvation = (self.fullness <= 0)
@@ -117,10 +130,14 @@ class Husband(Man):
             self.eat()
         elif self.house.money < 100 * self.house.citizens:
             self.work()
+        elif self.house.catfood < 10:
+            self.petshopping()
         elif dice == 1:
             self.work()
         elif dice == 2:
             self.eat()
+        elif dice == 3:
+            self.pet_the_cat()
         else:
             self.gaming()
 
@@ -135,6 +152,16 @@ class Husband(Man):
         self.happiness += 20
         self.fullness -= 10
 
+    def petshopping(self):
+        if self.house.money >= 10 * self.house.cats:
+            self.fullness -= 10
+            cprint('{} сходил в зоомагазин за кошачьим кормом'.format(self.name), color='magenta')
+            self.house.money -= 10 * self.house.cats
+            self.house.catfood += 10 * self.house.cats
+        else:
+            cprint('{} деньги кончились! Придётся идти работать.'.format(self.name), color='red')
+            self.work()
+
 
 class Wife(Man):
     bought_fur_coats = 0
@@ -145,20 +172,21 @@ class Wife(Man):
             self.eat()
         elif self.house.food <= 30 * self.house.citizens:
             self.shopping()
+        elif self.house.dirt > 90:
+            self.clean_house()
         elif dice == 1:
             self.eat()
         elif dice == 2:
             self.shopping()
         elif dice == 3:
             self.clean_house()
+        elif dice == 4:
+            self.pet_the_cat()
         else:
             self.buy_fur_coat()
 
     def shopping(self):
         need_to_buy = 30 * self.house.citizens
-        # TODO просто у жены сильно много минусов, допустим что она любит покупать и тут ей присвоим +10
-        # TODO это сразу уравновешивает рендом даже в положительную сторону, если вы согласны, то можно приступать
-        # TODO ко второй части там если что еще подебажим алгоритм
         self.happiness += 10
         self.fullness -= 10
         if self.house.money >= need_to_buy:
@@ -194,15 +222,79 @@ class Wife(Man):
             self.house.dirt = 0
 
 
+class Cat:
+    total_eaten = 0
+
+    def __init__(self, name):
+        self.name = name
+        self.fullness = 30
+        self.house = None
+
+    def __str__(self):
+        return 'Я — {}, сытость {}'.format(
+            self.name, self.fullness,
+        )
+
+    def eat(self):
+        dice_eat = randint(1, 10)
+        if self.house.catfood >= dice_eat:
+            cprint('{} съел {} кошачьего корма.'.format(self.name, dice_eat), color='yellow')
+            self.fullness += dice_eat * 2
+            self.house.catfood -= dice_eat
+            Cat.total_eaten += dice_eat
+        elif 0 < self.house.catfood < dice_eat:
+            cprint('{} съел {} кошачьего корма.'.format(self.name, self.house.catfood), color='yellow')
+            self.fullness += self.house.catfood * 2
+            self.house.catfood = 0
+            Cat.total_eaten += self.house.catfood
+        else:
+            cprint('{} нет кошачьего корма! Хотел поесть, но обиделся и пошёл проказничать.'.format(self.name),
+                   color='red')
+            self.spoil_things()
+
+    def sleep(self):
+        self.fullness -= 10
+        cprint('{} спал целый день'.format(self.name), color='magenta')
+
+    def spoil_things(self):
+        self.fullness -= 10
+        self.house.dirt += 5
+        cprint('{} весь день драл обои и портил мебель'.format(self.name), color='green')
+
+    def act(self):
+        dice = randint(1, 6)
+        if self.fullness < 20:
+            self.eat()
+        elif dice == 1:
+            self.spoil_things()
+        elif dice == 2:
+            self.eat()
+        else:
+            self.sleep()
+
+    def dead(self):
+        dead = (self.fullness <= 0)
+        if dead:
+            cprint('{} умер...'.format(self.name), color='red')
+        return dead
+
+
 home = House()
 serge = Husband(name='Серёжа')
 masha = Wife(name='Маша')
+murzik = Cat(name='Мурзик')
 
 citizens = [serge, masha]
+cat_family = [murzik]
 
 for citizen in citizens:
     citizen.go_to_the_house(house=home)
     home.citizens += 1
+
+for cat in cat_family:
+    rnd_citizen = randint(0, home.citizens - 1)
+    citizens[rnd_citizen].shelter_cat(cat)
+    home.cats += 1
 
 death_in_house = False
 day_out = 0
@@ -213,13 +305,18 @@ for day in range(1, 366):
     masha.very_dirty()
     serge.act()
     masha.act()
+    murzik.act()
     home.littering()
     cprint(serge, color='cyan')
     cprint(masha, color='cyan')
+    cprint(murzik, color='cyan')
     cprint(home, color='cyan')
     # Проверим, все ли пережили этот день
     for citizen in citizens:
         if citizen.dead():
+            death_in_house = True
+    for cat in cat_family:
+        if cat.dead():
             death_in_house = True
     day_out = day
     if death_in_house:
@@ -231,8 +328,8 @@ if death_in_house:
 else:
     cprint('--============= Победа! Мы прожили {} дней! =============--'.format(day_out),
            color='red', on_color='on_green')
-cprint('За это время было заработано денег — {}, съедено еды — {}, куплено шуб — {}.'.format(
-    Husband.earn_money, Man.total_eaten, Wife.bought_fur_coats), color='green')
+cprint('За это время было заработано денег — {}, съедено еды — {}, съедено кошачьей еды — {}, куплено шуб — {}.'.format(
+    Husband.earn_money, Man.total_eaten, Cat.total_eaten, Wife.bought_fur_coats), color='green')
 
 exit(0)
 
