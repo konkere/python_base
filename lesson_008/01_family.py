@@ -317,7 +317,7 @@ class Cat:
 
 class Simulation:
 
-    def __init__(self):
+    def __init__(self, money_incidents, food_incidents):
         self.home = House()
         self.adult_citizens = [
             Husband(name='Серёжа', salary=150),
@@ -341,6 +341,26 @@ class Simulation:
         ]
         self.death_in_house = False
         self.day_out = 0
+        self.days_for_half_money = self.uniq_days_generate(money_incidents)
+        self.days_for_half_food = self.uniq_days_generate(food_incidents)
+
+    def uniq_days_generate(self, quantity):
+        days = []
+        if quantity == 0:
+            return days
+        while quantity > len(days):
+            day = randint(1, 365)
+            if day not in days:
+                days.append(day)
+        return days
+
+    def incident_half_money(self, day):
+        if day in self.days_for_half_money:
+            self.home.money = int(self.home.money / 2)
+
+    def incident_half_food(self, day):
+        if day in self.days_for_half_food:
+            self.home.food = int(self.home.food / 2)
 
     def housewarming(self):
         for citizen in self.adult_citizens:
@@ -360,7 +380,7 @@ class Simulation:
         for cats in range(30):
             survival = 0
             for _ in range(3):
-                self.__init__()
+                self.__init__(money_incidents, food_incidents)
                 self.cat_family.clear()
                 cat_number = 0
                 while cat_number <= cats:
@@ -381,6 +401,8 @@ class Simulation:
     def act(self):
         for day in range(1, 366):
             cprint('================== День {} =================='.format(day), color='red')
+            self.incident_half_money(day)
+            self.incident_half_food(day)
             for citizen in self.adult_citizens:
                 citizen.very_dirty()
             for citizen in self.citizens:
@@ -416,10 +438,14 @@ class Simulation:
                .format(Husband.earn_money, Man.total_eaten, Cat.total_eaten, Wife.bought_fur_coats), color='green')
 
 
-life = Simulation()
-for salary in range(50, 401, 50):
-    max_cats = life.experiment(salary=salary)
-    print('При зарплате {} получилось прокормить {} котов'.format(salary, max_cats))
+for food_incidents in range(6):
+    for money_incidents in range(6):
+        life = Simulation(money_incidents, food_incidents)
+        cprint('----- Инцидентов за год с пропажей денег: {}, еды: {} -----'.format(money_incidents, food_incidents),
+              color='red', on_color='on_green')
+        for salary in range(50, 401, 50):
+            max_cats = life.experiment(salary=salary)
+            print('При зарплате {} получилось прокормить {} котов'.format(salary, max_cats))
 
 
 ######################################################## Часть вторая
