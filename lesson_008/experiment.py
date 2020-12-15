@@ -318,11 +318,15 @@ class Simulation:
         for cats in range(30):
             survival = 0
             for _ in range(3):
+                # TODO плохой стилт так писать, лучше создать отдельный метод обнуления(пересоздания)
+                # TODO  а в __init__ просто определить то что будет в экземпляре.
                 self.__init__(money_incidents, food_incidents, self.salary)
                 self.cat_family = self.cats_generate(cats)
                 self.housewarming()
                 if self.survive_one_year():
                     survival += 1
+                    # TODO тут проверку делать вложенноей тут, если survival == 2 то ретурним cats
+                    # TODO нам достаточно если два раз будет пройден цикл ан год
             if survival > 1:
                 max_cats = cats + 1
         return max_cats
@@ -346,6 +350,7 @@ class Simulation:
                     self.death_in_house = True
             self.day_out = day
             if self.death_in_house:
+                # TODO тут ретурним False
                 break
         return not self.death_in_house
 
