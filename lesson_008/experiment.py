@@ -260,32 +260,28 @@ class Cat:
 
 class Simulation:
 
-    def __init__(self, money_incidents, food_incidents):
+    def __init__(self, money_incidents, food_incidents, salary):
         self.home = House()
+        self.cat_family = []
+        self.salary = salary
         self.adult_citizens = [
-            Husband(name='Серёжа', salary=150),
+            Husband(name='Серёжа', salary=self.salary),
             Wife(name='Маша'),
         ]
         self.children = [
             Child(name='Коля'),
         ]
         self.citizens = self.adult_citizens + self.children
-        self.cat_family = [
-            Cat(name='Палач'),
-            Cat(name='Нюхач'),
-            Cat(name='Котозавр'),
-            Cat(name='Гарфилд'),
-            Cat(name='Том'),
-            Cat(name='Васька'),
-            Cat(name='Мурзик'),
-            Cat(name='Снежок'),
-            Cat(name='Люцифер'),
-            Cat(name='Рыжик'),
-        ]
         self.death_in_house = False
         self.day_out = 0
         self.days_for_half_money = self.uniq_days_generate(money_incidents)
         self.days_for_half_food = self.uniq_days_generate(food_incidents)
+
+    def cats_generate(self, cats):
+        cats_family = []
+        for cat in range(cats):
+            cats_family.append(Cat(cat))
+        return cats_family
 
     def uniq_days_generate(self, quantity):
         days = []
@@ -317,28 +313,21 @@ class Simulation:
             self.adult_citizens[rnd_citizen].shelter_cat(cat)
             self.home.cats += 1
 
-    def experiment(self, salary):
+    def experiment(self):
         max_cats = 0
         for cats in range(30):
             survival = 0
             for _ in range(3):
-                self.__init__(money_incidents, food_incidents)
-                self.cat_family.clear()
-                cat_number = 0
-                while cat_number <= cats:
-                    self.cat_family.append(Cat(cat_number))
-                    cat_number += 1
-                self.adult_citizens[0] = Husband(name='Серёжа', salary=salary)
-                self.citizens = self.adult_citizens + self.children
+                self.__init__(money_incidents, food_incidents, self.salary)
+                self.cat_family = self.cats_generate(cats)
                 self.housewarming()
-                self.act()
-                if not self.death_in_house:
+                if self.survive_one_year():
                     survival += 1
             if survival > 1:
                 max_cats = cats + 1
         return max_cats
 
-    def act(self):
+    def survive_one_year(self):
         for day in range(1, 366):
             self.incident_half_money(day)
             self.incident_half_food(day)
@@ -358,15 +347,16 @@ class Simulation:
             self.day_out = day
             if self.death_in_house:
                 break
+        return not self.death_in_house
 
 
 for food_incidents in range(6):
     for money_incidents in range(6):
-        life = Simulation(money_incidents, food_incidents)
         cprint('----- Инцидентов за год с пропажей денег: {}, еды: {} -----'.format(money_incidents, food_incidents),
                color='red', on_color='on_green')
         for salary in range(50, 401, 50):
-            max_cats = life.experiment(salary=salary)
+            life = Simulation(money_incidents, food_incidents, salary)
+            max_cats = life.experiment()
             print('При зарплате {} получилось прокормить {} котов'.format(salary, max_cats))
 
 
