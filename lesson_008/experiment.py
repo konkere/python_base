@@ -277,6 +277,23 @@ class Simulation:
         self.days_for_half_money = self.uniq_days_generate(money_incidents)
         self.days_for_half_food = self.uniq_days_generate(food_incidents)
 
+    def purge_life(self, money_incidents, food_incidents, salary):
+        self.salary = salary
+        self.home.money = 100
+        self.home.food = 50
+        self.home.dirt = 0
+        self.home.catfood = 30
+        self.home.adult_citizens = 0
+        self.home.children = 0
+        self.home.cats = 0
+        self.death_in_house = False
+        self.day_out = 0
+        self.days_for_half_money = self.uniq_days_generate(money_incidents)
+        self.days_for_half_food = self.uniq_days_generate(food_incidents)
+        for citizen in self.citizens:
+            citizen.fullness = 30
+            citizen.happiness = 100
+
     def cats_generate(self, cats):
         cats_family = []
         for cat in range(cats):
@@ -318,17 +335,18 @@ class Simulation:
         for cats in range(30):
             survival = 0
             for _ in range(3):
-                # TODO плохой стилт так писать, лучше создать отдельный метод обнуления(пересоздания)
-                # TODO  а в __init__ просто определить то что будет в экземпляре.
-                self.__init__(money_incidents, food_incidents, self.salary)
+                self.purge_life(money_incidents, food_incidents, self.salary)
                 self.cat_family = self.cats_generate(cats)
                 self.housewarming()
                 if self.survive_one_year():
                     survival += 1
+                    if survival == 2:
+                        max_cats = cats + 1
+                        break
                     # TODO тут проверку делать вложенноей тут, если survival == 2 то ретурним cats
                     # TODO нам достаточно если два раз будет пройден цикл ан год
-            if survival > 1:
-                max_cats = cats + 1
+                    #
+                    # TODO ретурним -- это увеличивем макс_кэтс и прерываем текущий прогон?
         return max_cats
 
     def survive_one_year(self):
@@ -350,8 +368,7 @@ class Simulation:
                     self.death_in_house = True
             self.day_out = day
             if self.death_in_house:
-                # TODO тут ретурним False
-                break
+                return False
         return not self.death_in_house
 
 
