@@ -332,6 +332,8 @@ class Simulation:
 
     def experiment(self):
         max_cats = 0
+        # TODO чтобы не заводит новую переменную можно сразу max_cats можно рендж записать так
+        # TODO range(30, 0, -1): от 30 до 1 с шагом 1
         for cats in range(30):
             survival = 0
             for _ in range(3):
@@ -342,11 +344,9 @@ class Simulation:
                     survival += 1
                     if survival == 2:
                         max_cats = cats + 1
+                        # TODO вот так return max_cats, тогда тут ретурним cats
                         break
-                    # TODO тут проверку делать вложенноей тут, если survival == 2 то ретурним cats
-                    # TODO нам достаточно если два раз будет пройден цикл ан год
-                    #
-                    # TODO ретурним -- это увеличивем макс_кэтс и прерываем текущий прогон?
+        # TODO а тут просто return 0
         return max_cats
 
     def survive_one_year(self):
