@@ -331,10 +331,7 @@ class Simulation:
             self.home.cats += 1
 
     def experiment(self):
-        max_cats = 0
-        # TODO чтобы не заводит новую переменную можно сразу max_cats можно рендж записать так
-        # TODO range(30, 0, -1): от 30 до 1 с шагом 1
-        for cats in range(30):
+        for cats in range(30, 0, -1):
             survival = 0
             for _ in range(3):
                 self.purge_life(money_incidents, food_incidents, self.salary)
@@ -343,11 +340,8 @@ class Simulation:
                 if self.survive_one_year():
                     survival += 1
                     if survival == 2:
-                        max_cats = cats + 1
-                        # TODO вот так return max_cats, тогда тут ретурним cats
-                        break
-        # TODO а тут просто return 0
-        return max_cats
+                        return cats
+        return 0
 
     def survive_one_year(self):
         for day in range(1, 366):
