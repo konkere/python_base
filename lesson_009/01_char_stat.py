@@ -25,7 +25,65 @@
 #   см https://refactoring.guru/ru/design-patterns/template-method
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
-# TODO здесь ваш код
+import zipfile
+
+
+class LettersStat:
+
+    def __init__(self, file_name):
+        self.file_name = file_name
+        self.stat = {}
+        if self.file_name.endswith('.zip'):
+            self.unzip()
+        self.letters_sort = []
+
+    def unzip(self):
+        zfile = zipfile.ZipFile(self.file_name, 'r')
+        for filename in zfile.namelist():
+            zfile.extract(filename)
+        self.file_name = filename
+
+    def parse_file(self):
+        with open(self.file_name, 'r', encoding='cp1251') as file:
+            for line in file:
+                self.parse_line(line)
+
+    def parse_line(self, line):
+        for char in line:
+            if char.isalpha() and char in self.stat:
+                self.stat[char] += 1
+            elif char.isalpha() and char not in self.stat:
+                self.stat[char] = 1
+
+    def sort_by(self, sortby):
+        if sortby == 'frequency decrease':
+            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[1], reverse=True)
+        elif sortby == 'frequency increase':
+            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[1])
+        elif sortby == 'alphabet decrease':
+            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[0], reverse=True)
+        elif sortby == 'alphabet increase':
+            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[0])
+
+    def table_stat(self):
+        print('╔' + '═' * 7 + '╤' + '═' * 9 + '╗')
+        print('║{letter:^7}│{quantity:^9}║'.format(letter='буква', quantity='частота'))
+        print('╠' + '═' * 7 + '╪' + '═' * 9 + '╣')
+        for number, [letter, quantity] in enumerate(self.letters_sort):
+            print('║{letter:^7}│{quantity:^9}║'.format(letter=letter, quantity=quantity))
+            if number < len(self.letters_sort) - 1:
+                print('╟' + '─' * 7 + '┼' + '─' * 9 + '╢')
+        print('╚' + '═' * 7 + '╧' + '═' * 9 + '╝')
+
+
+letters = LettersStat(file_name='python_snippets/voyna-i-mir.txt.zip')
+# letters = LettersStat(file_name='voyna-i-mir.txt')
+letters.parse_file()
+letters.sort_by('frequency decrease')
+# letters.sort_by('frequency increase')
+# letters.sort_by('alphabet increase')
+# letters.sort_by('alphabet decrease')
+letters.table_stat()
 
 # После зачета первого этапа нужно сделать упорядочивание статистики
 #  - по частоте по возрастанию
