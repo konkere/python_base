@@ -23,8 +23,47 @@
 #   см https://refactoring.guru/ru/design-patterns/template-method
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
-# TODO здесь ваш код
 
+class EventsParser:
+
+    def __init__(self, file_in, file_out):
+        self.file_in = file_in
+        self.file_out = file_out
+        self.count = 0
+        open(self.file_out, mode='w+').close()
+
+    def parse_file(self):
+        with open(self.file_in, 'r', encoding='utf8') as file:
+            prev_date_time = ''
+            for line in file:
+                prev_date_time = self.parse_line(line, prev_date_time)
+
+    def parse_line(self, line, prev_date_time):
+        line_year = line[1:5]
+        line_month = line[6:8]
+        line_day = line[9:11]
+        line_hour = line[12:14]
+        line_minute = line[15:17]
+        line_date_time = f'[{line_year}.{line_month}.{line_day} {line_hour}:{line_minute}]'
+        if line_date_time != prev_date_time != '':
+            line_out = f'{prev_date_time} {self.count}\n'
+            self.write_line(line_out)
+            self.count = 0
+        if len(line) == 33:
+            self.count += 1
+        return line_date_time
+
+    def write_line(self, line):
+        file_out = open(self.file_out, mode='a')
+        file_out.write(line)
+        file_out.close()
+
+
+event_parse = EventsParser('events.txt', 'events_nok_by_min.txt')
+event_parse.parse_file()
+
+# TODO Группировка -- это как с минутами? В этот час/месяц/год столько-то NOKов?
+# TODO Или группировка файлами? NOKи также по количиству в минуту, но в отдельных файлах по часам/месяцам/годам?
 # После зачета первого этапа нужно сделать группировку событий
 #  - по часам
 #  - по месяцу
