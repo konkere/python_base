@@ -40,7 +40,35 @@ import shutil
 #   см https://refactoring.guru/ru/design-patterns/template-method
 #   и https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
 
-# TODO здесь ваш код
+
+class FileSorter:
+
+    def __init__(self, origin_dir, sorted_dir):
+        self.origin_dir = os.path.normpath(origin_dir)
+        self.sorted_dir = os.path.normpath(sorted_dir)
+        if not os.path.exists(self.sorted_dir):
+            os.makedirs(self.sorted_dir)
+
+    def go(self):
+        for dir_path, dir_names, filenames in os.walk(self.origin_dir):
+            for file_name in filenames:
+                file_path = os.path.join(dir_path, file_name)
+                file_unixtime = os.path.getmtime(file_path)
+                file_time = time.gmtime(file_unixtime)
+                self.sort_file(dir_path, file_name, str(file_time[0]), str(file_time[1]))
+
+    def sort_file(self, dir_path, file_name, year, month):
+        origin_file = os.path.join(dir_path, file_name)
+        destination_dir = os.path.join(self.sorted_dir, year, month)
+        destination_file = os.path.join(destination_dir, file_name)
+        if not os.path.exists(destination_dir):
+            os.makedirs(destination_dir)
+        if not os.path.exists(destination_file):
+            shutil.copy2(origin_file, destination_dir)
+
+
+file_sorter = FileSorter('./icons', './icons_by_year')
+file_sorter.go()
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
