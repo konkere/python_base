@@ -89,7 +89,11 @@ class FileSorter:
         zfile.extract(element, destination_dir)
 
 
+# TODO тут бы тоже применить шаблонный метод
+
 # file_sorter = FileSorter('./icons', './icons_by_year')
+# TODO все работает, но нужно доделать, чтобы в этом способе, когда мы создаем файлы в них
+# TODO записывались мета данные которые были в архиве, это дата создания файла нас интересует.
 file_sorter = FileSorter('./icons.zip', './icons_by_year')
 
 # Усложненное задание (делать по желанию)
