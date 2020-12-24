@@ -55,6 +55,7 @@ class LettersStat:
             elif char.isalpha() and char not in self.stat:
                 self.stat[char] = 1
 
+    # TODO оставляем этот метод, и пишем в нем дефолтную сортировку.
     def sort_by(self, sortby):
         if sortby == 'frequency decrease':
             self.letters_sort = sorted(self.stat.items(), key=lambda item: item[1], reverse=True)
@@ -75,6 +76,11 @@ class LettersStat:
                 print('╟' + '─' * 7 + '┼' + '─' * 9 + '╢')
         print('╚' + '═' * 7 + '╧' + '═' * 9 + '╝')
 
+# TODO применим шаблонный метод
+# TODO из https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
+# TODO тут определяем еще 3 дочерних класса, и в них переопределяем только метод sort_by
+
+# TODO общее количество еще бы знать в таблице.
 
 letters = LettersStat(file_name='python_snippets/voyna-i-mir.txt.zip')
 # letters = LettersStat(file_name='voyna-i-mir.txt')
