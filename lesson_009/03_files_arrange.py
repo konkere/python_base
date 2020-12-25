@@ -48,10 +48,7 @@ class FileSorter:
         self.origin_path = os.path.normpath(origin_path)
         self.sorted_dir = os.path.normpath(sorted_dir)
         self.check_dir_exist(self.sorted_dir)
-        if origin_path.endswith('.zip'):
-            self.zip_go()
-        else:
-            self.go()
+        self.go()
 
     def check_dir_exist(self, dir):
         if not os.path.exists(dir):
@@ -73,28 +70,30 @@ class FileSorter:
         if not os.path.exists(destination_file):
             shutil.copy2(origin_file, destination_dir)
 
-    def zip_go(self):
+
+class FileSorterFromZip(FileSorter):
+
+    def go(self):
         with zipfile.ZipFile(f'{self.origin_path}', 'r') as zfile:
             zip_list = zfile.infolist()
             for element in zip_list:
                 if element.file_size > 0:
                     year = str(element.date_time[0])
                     month = str(element.date_time[1])
-                    self.unzip_and_sort_file(zfile, element, year, month)
+                    self.sort_file(zfile, element, year, month)
 
-    def unzip_and_sort_file(self, zfile, element, year, month):
+    def sort_file(self, zfile, element, year, month):
+        date_time = time.mktime(element.date_time + (0, 0, 0))
         destination_dir = os.path.join(self.sorted_dir, year, month)
         self.check_dir_exist(destination_dir)
         element.filename = os.path.basename(element.filename)
+        destination_file = os.path.join(destination_dir, element.filename)
         zfile.extract(element, destination_dir)
+        os.utime(path=destination_file, times=(date_time, date_time))
 
-
-# TODO тут бы тоже применить шаблонный метод
 
 # file_sorter = FileSorter('./icons', './icons_by_year')
-# TODO все работает, но нужно доделать, чтобы в этом способе, когда мы создаем файлы в них
-# TODO записывались мета данные которые были в архиве, это дата создания файла нас интересует.
-file_sorter = FileSorter('./icons.zip', './icons_by_year')
+file_sorter = FileSorterFromZip('./icons.zip', './icons_by_year')
 
 # Усложненное задание (делать по желанию)
 # Нужно обрабатывать zip-файл, содержащий фотографии, без предварительного извлечения файлов в папку.
