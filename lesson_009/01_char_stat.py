@@ -47,6 +47,8 @@ class LettersStat:
         with open(self.file_name, 'r', encoding='cp1251') as file:
             for line in file:
                 self.parse_line(line)
+        self.sort_by()
+        self.table_stat()
 
     def parse_line(self, line):
         for char in line:
@@ -55,41 +57,55 @@ class LettersStat:
             elif char.isalpha() and char not in self.stat:
                 self.stat[char] = 1
 
-    # TODO оставляем этот метод, и пишем в нем дефолтную сортировку.
-    def sort_by(self, sortby):
-        if sortby == 'frequency decrease':
-            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[1], reverse=True)
-        elif sortby == 'frequency increase':
-            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[1])
-        elif sortby == 'alphabet decrease':
-            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[0], reverse=True)
-        elif sortby == 'alphabet increase':
-            self.letters_sort = sorted(self.stat.items(), key=lambda item: item[0])
+    def sort_by(self):
+        # frequency decrease
+        self.letters_sort = sorted(self.stat.items(), key=lambda item: item[1], reverse=True)
 
     def table_stat(self):
+        letters_summ = 0
         print('╔' + '═' * 7 + '╤' + '═' * 9 + '╗')
         print('║{letter:^7}│{quantity:^9}║'.format(letter='буква', quantity='частота'))
         print('╠' + '═' * 7 + '╪' + '═' * 9 + '╣')
         for number, [letter, quantity] in enumerate(self.letters_sort):
+            letters_summ += quantity
             print('║{letter:^7}│{quantity:^9}║'.format(letter=letter, quantity=quantity))
-            if number < len(self.letters_sort) - 1:
-                print('╟' + '─' * 7 + '┼' + '─' * 9 + '╢')
+            print('╟' + '─' * 7 + '┼' + '─' * 9 + '╢')
+        print('║{letters:^7}╪{summ:^9}║'.format(letters='Итого', summ=letters_summ))
         print('╚' + '═' * 7 + '╧' + '═' * 9 + '╝')
 
-# TODO применим шаблонный метод
-# TODO из https://gitlab.skillbox.ru/vadim_shandrinov/python_base_snippets/snippets/4
-# TODO тут определяем еще 3 дочерних класса, и в них переопределяем только метод sort_by
 
-# TODO общее количество еще бы знать в таблице.
+class LettersStatFrequencyUp(LettersStat):
 
-letters = LettersStat(file_name='python_snippets/voyna-i-mir.txt.zip')
-# letters = LettersStat(file_name='voyna-i-mir.txt')
-letters.parse_file()
-letters.sort_by('frequency decrease')
-# letters.sort_by('frequency increase')
-# letters.sort_by('alphabet increase')
-# letters.sort_by('alphabet decrease')
-letters.table_stat()
+    def sort_by(self):
+        # frequency increase
+        self.letters_sort = sorted(self.stat.items(), key=lambda item: item[1])
+
+
+class LettersStatAlphabetDown(LettersStat):
+
+    def sort_by(self):
+        # alphabet decrease
+        self.letters_sort = sorted(self.stat.items(), key=lambda item: item[0], reverse=True)
+
+
+class LettersStatAlphabetUp(LettersStat):
+
+    def sort_by(self):
+        # alphabet increase
+        self.letters_sort = sorted(self.stat.items(), key=lambda item: item[0])
+
+
+letters_frequency_decrease = LettersStat(file_name='python_snippets/voyna-i-mir.txt.zip')
+letters_frequency_decrease.parse_file()
+
+# letters_frequency_increase = LettersStatFrequencyUp(file_name='python_snippets/voyna-i-mir.txt.zip')
+# letters_frequency_increase.parse_file()
+
+# letters_alphabet_decrease = LettersStatAlphabetDown(file_name='python_snippets/voyna-i-mir.txt.zip')
+# letters_alphabet_decrease.parse_file()
+
+# letters_alphabet_increase = LettersStatAlphabetUp(file_name='python_snippets/voyna-i-mir.txt.zip')
+# letters_alphabet_increase.parse_file()
 
 # После зачета первого этапа нужно сделать упорядочивание статистики
 #  - по частоте по возрастанию
