@@ -99,12 +99,14 @@ class EventsParserByYear(EventsParser):
         return line_date_time
 
 
-event_parse = EventsParser('events.txt', 'events_nok_by_min.txt')
+# event_parse = EventsParser('events.txt', 'events_nok_by_min.txt')
 event_parse_by_hour = EventsParserByHour('events.txt', 'events_nok_by_hour.txt')
-event_parse_by_month = EventsParserByMonth('events.txt', 'events_nok_by_month.txt')
-event_parse_by_year = EventsParserByYear('events.txt', 'events_nok_by_year.txt')
+# event_parse_by_month = EventsParserByMonth('events.txt', 'events_nok_by_month.txt')
+# event_parse_by_year = EventsParserByYear('events.txt', 'events_nok_by_year.txt')
 
 # После зачета первого этапа нужно сделать группировку событий
 #  - по часам
 #  - по месяцу
 #  - по году
+
+# зачет!
