@@ -9,7 +9,6 @@ input_data = input('Если хочешь что-нибудь сделать, с
 try:
     leeloo = int(input_data[4])
     result = BRUCE_WILLIS * leeloo
-    print(f'- Leeloo Dallas! Multi-pass № {result}!')
 except ValueError:
     print(f'Невозможно преобразовать к числу, 5-ый элемент: "{input_data[4]}"')
 except IndexError:
@@ -17,6 +16,8 @@ except IndexError:
 except Exception as exc:
     print('Произошло что-то непредвиденное...')
     print(f'{exc} - {exc.args}')
+else:
+    print(f'- Leeloo Dallas! Multi-pass № {result}!')
 
 # Ообернуть код и обработать исключительные ситуации для произвольных входных параметров
 # - ValueError - невозможно преобразовать к числу
