@@ -9,11 +9,12 @@ input_data = input('Если хочешь что-нибудь сделать, с
 try:
     leeloo = int(input_data[4])
     result = BRUCE_WILLIS * leeloo
-# TODO в ValueError IndexError пишем тоже as exc и принтуем что произошло.
-except ValueError:
+except ValueError as exc:
     print(f'Невозможно преобразовать к числу, 5-ый элемент: "{input_data[4]}"')
-except IndexError:
+    print(f'{exc}')
+except IndexError as exc:
     print(f'Выход за границы списка, в строке "{input_data}" отсутсвует 5-ый элемент')
+    print(f'{exc}')
 except Exception as exc:
     print('Произошло что-то непредвиденное...')
     print(f'{exc} - {exc.args}')
