@@ -9,6 +9,7 @@ input_data = input('Если хочешь что-нибудь сделать, с
 try:
     leeloo = int(input_data[4])
     result = BRUCE_WILLIS * leeloo
+# TODO в ValueError IndexError пишем тоже as exc и принтуем что произошло.
 except ValueError:
     print(f'Невозможно преобразовать к числу, 5-ый элемент: "{input_data[4]}"')
 except IndexError:
