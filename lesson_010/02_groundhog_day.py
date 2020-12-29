@@ -69,11 +69,13 @@ def one_day():
     day_carma = randint(1, 7)
     day_error_dice = randint(0, 13)
     if day_error_dice == 13:
+        # TODO используем из random choice выбираем ошибку и только потом вызываем ()
         raise error_rnd()
     return day_carma
 
 
 def error_rnd():
+    # TODO список выносим в глобальную область, список у нас будет из объектов без ()
     errors = [
         IamGodError(),
         DrunkError(),
@@ -89,11 +91,14 @@ ENLIGHTENMENT_CARMA_LEVEL = 777
 day = 0
 carma = 0
 
+# TODO нужно написать функцию которая будет записывать логи в функцию
+
 while carma < ENLIGHTENMENT_CARMA_LEVEL:
     day += 1
     print(f'-===== День {day} =====-')
     try:
         carma += one_day()
+    # TODO тут мы должны отлавливать каждую ошибку, наполнять список и потом записать все в файл
     except GroundhogError as exc:
         print(f'{exc}')
     print(f'Карма: {carma}')
