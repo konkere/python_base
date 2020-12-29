@@ -18,6 +18,7 @@
 # базовых встроенных исключений.
 
 from random import randint
+from random import choice
 
 
 class GroundhogError(Exception):
@@ -69,40 +70,41 @@ def one_day():
     day_carma = randint(1, 7)
     day_error_dice = randint(0, 13)
     if day_error_dice == 13:
-        # TODO используем из random choice выбираем ошибку и только потом вызываем ()
-        raise error_rnd()
+        day_error = choice(errors)
+        raise day_error
     return day_carma
 
 
-def error_rnd():
-    # TODO список выносим в глобальную область, список у нас будет из объектов без ()
-    errors = [
-        IamGodError(),
-        DrunkError(),
-        CarCrashError(),
-        GluttonyError(),
-        DepressionError(),
-        SuicideError(),
-    ]
-    return errors[randint(0, 5)]
+def doom_log_write(filename, events):
+    with open(filename, mode='w+') as file:
+        for day, event in events:
+            file.write(f'День {day}: {event}\n')
 
 
 ENLIGHTENMENT_CARMA_LEVEL = 777
 day = 0
 carma = 0
-
-# TODO нужно написать функцию которая будет записывать логи в функцию
+doom = []
+errors = [
+    IamGodError,
+    DrunkError,
+    CarCrashError,
+    GluttonyError,
+    DepressionError,
+    SuicideError,
+]
 
 while carma < ENLIGHTENMENT_CARMA_LEVEL:
     day += 1
     print(f'-===== День {day} =====-')
     try:
         carma += one_day()
-    # TODO тут мы должны отлавливать каждую ошибку, наполнять список и потом записать все в файл
     except GroundhogError as exc:
+        doom.append([day, exc])
         print(f'{exc}')
     print(f'Карма: {carma}')
 
 print(f'Просветление произошло на {day} день')
+doom_log_write('doom.log', doom)
 
 # https://goo.gl/JnsDqu
