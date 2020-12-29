@@ -49,6 +49,12 @@ class RegsParser:
         self.file_regs_bad = 'registrations_bad.log'
         # TODO эту часть можно вынести в метод записи и проверить там есть или нету файла такого
         # TODO можно использовать isfile если есть то удалять
+        #
+        # TODO У меня же метод записи построчно работает: открыл-записал_строку-закрыл.
+        # TODO Я не могу файл удалять после каждой строки.
+        # TODO А данная конструкция как раз единожды создаёт файлы, в которые потом пишет функция.
+        # TODO А если файлы уже существовали,
+        # TODO то пересоздаёт пустые с такими именами (удаляет имеющиеся и создаёт пустые).
         open(self.file_regs_good, mode='w+').close()
         open(self.file_regs_bad, mode='w+').close()
         self.parse_file()
@@ -66,45 +72,43 @@ class RegsParser:
             self.check_email(email)
             self.check_age(age)
         except (ValueError, NotNameError, NotEmailError) as exc:
-            self.write_bad(line, exc)
+            self.write_line(line, exc)
         else:
-            self.write_good(line)
+            self.write_line(line)
 
-    # TODO пайчарм на что то намекает, методы подчеркнуты
-    def check_fields_exist(self, line):
+    def write_line(self, line, error=False):
+        if not error:
+            filename = self.file_regs_good
+            line = f'{line}\n'
+        else:
+            filename = self.file_regs_bad
+            line = f'{line} 🠖 {error}\n'
+        with open(filename, mode='a') as file:
+            file.write(line)
+
+    @staticmethod
+    def check_fields_exist(line):
         name, email, age = line.split(' ')
         return name, email, age
 
-    def check_name(self, name):
+    @staticmethod
+    def check_name(name):
         if not name.isalpha():
             raise NotNameError
 
-    def check_email(self, email):
-        exist_dot = False
-        exist_at = False
+    @staticmethod
+    def check_email(email):
+        exist_chars = {'.': False, '@': False}
         for char in email:
-            # TODO попробуйте объединить используя or
-            if char == '.':
-                exist_dot = True
-            if char == '@':
-                exist_at = True
-        if not (exist_dot and exist_at):
+            if char in exist_chars.keys():
+                exist_chars[char] = True
+        if not all(exist_chars.values()):
             raise NotEmailError
 
-    def check_age(self, age):
+    @staticmethod
+    def check_age(age):
         if not (age.isdigit() and (9 < int(age) < 100)):
             raise ValueError('Поле возраст НЕ является числом от 10 до 99')
-
-    # TODO попробуйте написать одну общее функцию
-    def write_good(self, line):
-        with open(self.file_regs_good, mode='a') as file:
-            line = f'{line}\n'
-            file.write(line)
-
-    def write_bad(self, line, error):
-        with open(self.file_regs_bad, mode='a') as file:
-            line_error = f'{line} 🠖 {error}\n'
-            file.write(line_error)
 
 
 RegsParser('registrations.txt')
