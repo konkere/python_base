@@ -47,6 +47,8 @@ class RegsParser:
         self.file_in = file_in
         self.file_regs_good = 'registrations_good.log'
         self.file_regs_bad = 'registrations_bad.log'
+        # TODO эту часть можно вынести в метод записи и проверить там есть или нету файла такого
+        # TODO можно использовать isfile если есть то удалять
         open(self.file_regs_good, mode='w+').close()
         open(self.file_regs_bad, mode='w+').close()
         self.parse_file()
@@ -68,6 +70,7 @@ class RegsParser:
         else:
             self.write_good(line)
 
+    # TODO пайчарм на что то намекает, методы подчеркнуты
     def check_fields_exist(self, line):
         name, email, age = line.split(' ')
         return name, email, age
@@ -80,6 +83,7 @@ class RegsParser:
         exist_dot = False
         exist_at = False
         for char in email:
+            # TODO попробуйте объединить используя or
             if char == '.':
                 exist_dot = True
             if char == '@':
@@ -91,6 +95,7 @@ class RegsParser:
         if not (age.isdigit() and (9 < int(age) < 100)):
             raise ValueError('Поле возраст НЕ является числом от 10 до 99')
 
+    # TODO попробуйте написать одну общее функцию
     def write_good(self, line):
         with open(self.file_regs_good, mode='a') as file:
             line = f'{line}\n'
