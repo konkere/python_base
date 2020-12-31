@@ -108,3 +108,5 @@ print(f'Просветление произошло на {day} день')
 doom_log_write('doom.log', doom)
 
 # https://goo.gl/JnsDqu
+
+# зачет!
