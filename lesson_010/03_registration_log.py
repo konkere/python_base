@@ -47,14 +47,7 @@ class RegsParser:
         self.file_in = file_in
         self.file_regs_good = 'registrations_good.log'
         self.file_regs_bad = 'registrations_bad.log'
-        # TODO эту часть можно вынести в метод записи и проверить там есть или нету файла такого
-        # TODO можно использовать isfile если есть то удалять
-        #
-        # TODO У меня же метод записи построчно работает: открыл-записал_строку-закрыл.
-        # TODO Я не могу файл удалять после каждой строки.
-        # TODO А данная конструкция как раз единожды создаёт файлы, в которые потом пишет функция.
-        # TODO А если файлы уже существовали,
-        # TODO то пересоздаёт пустые с такими именами (удаляет имеющиеся и создаёт пустые).
+        # принял ответ
         open(self.file_regs_good, mode='w+').close()
         open(self.file_regs_bad, mode='w+').close()
         self.parse_file()
@@ -112,3 +105,5 @@ class RegsParser:
 
 
 RegsParser('registrations.txt')
+
+# зачет!
