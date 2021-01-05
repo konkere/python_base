@@ -35,8 +35,11 @@ class PrimeNumbers:
         self.i += 1
         if self.i > self.n:
             raise StopIteration()
+        # TODO зачем мы каждый раз крутим цикл от 2, можно начать от self.i до self.n+1
+        # TODO поэтому там очень долго работает
         for number in range(2, self.i):
             if self.i % number == 0:
+                # TODO тут у нас вроде как рекурсия чего быть не должно
                 self.__next__()
         else:
             return self.i
@@ -48,9 +51,6 @@ for number in prime_number_iterator:
     print(number)
 
 
-# TODO после подтверждения части 1 преподователем, можно делать
-#
-# TODO 1 и 2 части никак не пересекаются ни кодом, ни исполнением, сделал сразу обе. 3-ю после зачёта буду делать.
 # Часть 2
 # Теперь нужно создать генератор, который выдает последовательность простых чисел до n
 # Распечатать все простые числа до 10000 в столбик
@@ -58,6 +58,7 @@ for number in prime_number_iterator:
 
 def prime_numbers_generator(n):
     for prime in range(2, n + 1):
+        # TODO тут тоже второй цикл крутим по списку prime_numbers который мы наполняем в else
         for number in range(2, prime):
             if prime % number == 0:
                 break
