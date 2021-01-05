@@ -10,6 +10,8 @@ import os.path
 
 
 def log_errors(log_file):
+    # TODO в данном примере флаг a перезапишет файл в любом случае.
+    # TODO так что эта строка лишняя
     open(log_file, mode='w').close()
 
     def log_errors_sub(func):
@@ -27,6 +29,7 @@ def log_errors(log_file):
                 with open(log_file, mode='a') as file:
                     file.write(line)
             else:
+                # TODO ретурним в try
                 return real_func
 
         return surrogate
@@ -62,7 +65,7 @@ lines = [
 
 for line in lines:
     try:
-        check_line(line)
+        check_line(line=line)
     except Exception as exc:
         print(f'Invalid format: {exc}')
 
