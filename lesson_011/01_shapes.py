@@ -44,3 +44,5 @@ draw_octagon(polygon_point=sd.get_point(600, 500), start_angle=13, side_length=1
 
 
 sd.pause()
+
+# зачет!
