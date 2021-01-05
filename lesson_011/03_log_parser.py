@@ -42,3 +42,5 @@ def grouped_event_generator(file_in):
 grouped_events = grouped_event_generator('events.txt')
 for group_time, event_count in grouped_events:
     print(f'[{group_time}] {event_count}')
+
+# зачет!
