@@ -26,23 +26,24 @@ class PrimeNumbers:
     def __init__(self, n):
         self.n = n
         self.i = 1
+        self.prime_numbers = []
 
     def __iter__(self):
         self.i = 1
+        self.prime_numbers = []
         return self
 
     def __next__(self):
         self.i += 1
-        if self.i > self.n:
-            raise StopIteration()
-        # TODO зачем мы каждый раз крутим цикл от 2, можно начать от self.i до self.n+1
-        # TODO поэтому там очень долго работает
-        for number in range(2, self.i):
-            if self.i % number == 0:
-                # TODO тут у нас вроде как рекурсия чего быть не должно
-                self.__next__()
-        else:
-            return self.i
+        for number in range(self.i, self.n + 1):
+            for prime in self.prime_numbers:
+                if number % prime == 0:
+                    break
+            else:
+                self.i = number
+                self.prime_numbers.append(self.i)
+                return self.i
+        raise StopIteration()
 
 
 # Part 1:
@@ -57,18 +58,19 @@ for number in prime_number_iterator:
 
 
 def prime_numbers_generator(n):
-    for prime in range(2, n + 1):
-        # TODO тут тоже второй цикл крутим по списку prime_numbers который мы наполняем в else
-        for number in range(2, prime):
-            if prime % number == 0:
+    prime_numbers = []
+    for number in range(2, n + 1):
+        for prime in prime_numbers:
+            if number % prime == 0:
                 break
         else:
-            yield prime
+            prime_numbers.append(number)
+            yield number
 
 
-# # Part 2
-# for number in prime_numbers_generator(n=10000):
-#     print(number)
+# Part 2
+for number in prime_numbers_generator(n=10000):
+    print(number)
 
 
 # Часть 3
