@@ -6,12 +6,13 @@
 # Имя файла лога - function_errors.log
 # Формат лога: <имя функции> <параметры вызова> <тип ошибки> <текст ошибки>
 # Лог файл открывать каждый раз при ошибке в режиме 'a'
-import os.path
 
 
 def log_errors(log_file):
     # TODO в данном примере флаг a перезапишет файл в любом случае.
     # TODO так что эта строка лишняя
+    #
+    # TODO флаг 'а' -- это ж append, он добавляет строку в конец. Если мы не о разных флагах.
     open(log_file, mode='w').close()
 
     def log_errors_sub(func):
@@ -19,6 +20,7 @@ def log_errors(log_file):
         def surrogate(*args, **kwargs):
             try:
                 real_func = func(*args, **kwargs)
+                return real_func
             except Exception as exc:
                 params_call = []
                 for param_call in args:
@@ -28,9 +30,6 @@ def log_errors(log_file):
                 line = f'{func.__name__} - {params_call} - {type(exc).__name__} - {exc}\n'
                 with open(log_file, mode='a') as file:
                     file.write(line)
-            else:
-                # TODO ретурним в try
-                return real_func
 
         return surrogate
 
