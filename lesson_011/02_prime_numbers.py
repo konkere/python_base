@@ -47,9 +47,9 @@ class PrimeNumbers:
 
 
 # Part 1:
-prime_number_iterator = PrimeNumbers(n=10000)
-for number in prime_number_iterator:
-    print(number)
+# prime_number_iterator = PrimeNumbers(n=10000)
+# for number in prime_number_iterator:
+#     print(number)
 
 
 # Часть 2
@@ -57,7 +57,7 @@ for number in prime_number_iterator:
 # Распечатать все простые числа до 10000 в столбик
 
 
-def prime_numbers_generator(n):
+def prime_numbers_generator(n, func=None):
     prime_numbers = []
     for number in range(2, n + 1):
         for prime in prime_numbers:
@@ -65,15 +65,17 @@ def prime_numbers_generator(n):
                 break
         else:
             prime_numbers.append(number)
-            yield number
+            if not func:
+                yield number
+            elif func(number):
+                yield number
 
 
 # Part 2
-for number in prime_numbers_generator(n=10000):
-    print(number)
+# for number in prime_numbers_generator(n=10000):
+#     print(number)
 
 
-# TODO делаем третью часть.
 # Часть 3
 # Написать несколько функций-фильтров, которые выдает True, если число:
 # 1) "счастливое" в обыденном пониманиии - сумма первых цифр равна сумме последних
@@ -89,3 +91,79 @@ for number in prime_numbers_generator(n=10000):
 # простых счастливых палиндромных чисел и так далее. Придумать не менее 2х способов.
 #
 # Подсказка: возможно, нужно будет добавить параметр в итератор/генератор.
+
+
+def lucky_number(number):
+    number_str = str(number)
+    half_digits = len(number_str) // 2
+    left_sum = 0
+    right_sum = 0
+    for digit in range(half_digits):
+        left_sum += int(number_str[digit])
+        right_sum += int(number_str[-1 - digit])
+    return left_sum == right_sum
+
+
+def palindrome_number(number):
+    number_str = str(number)
+    half_digits = len(number_str) // 2
+    for digit in range(half_digits):
+        if number_str[digit] != number_str[-1 - digit]:
+            return False
+    return True
+
+
+def automorphic_number(number):
+    number_exp2 = str(number ** 2)
+    number_str = str(number)
+    digits = len(number_str)
+    for digit in range(digits):
+        if number_str[digit] != number_exp2[digit - digits]:
+            return False
+    return True
+
+
+# Первый способ (полученные в итераторе простые числа дополнительно проверяем нужными функциями):
+# Отстранённое уточнение: все палиндромные числа -- счастливые по сути.
+prime_number_iterator = PrimeNumbers(n=10000)
+for number in prime_number_iterator:
+    if palindrome_number(number):
+        print(number)
+
+# Второй способ (передаём нужную функцию аргументом в генератор)
+for number in prime_numbers_generator(n=10000, func=palindrome_number):
+    print(number)
+
+
+############################## Просто для теста функций ##############################
+# numbers_to_check = [
+#     12345,
+#     1234,
+#     66754,
+#     77077,
+#     2890625,
+#     727,
+#     92083,
+#     723327,
+#     101,
+#     56789,
+#     109376,
+#     376,
+# ]
+#
+# for number in numbers_to_check:
+#     count = 0
+#     result = f'Число {number} - '
+#     if lucky_number(number):
+#         result += 'счастливое '
+#         count += 1
+#     if palindrome_number(number):
+#         result += 'палиндром '
+#         count += 1
+#     if automorphic_number(number):
+#         result += 'автоморфное '
+#         count += 1
+#     if count == 0:
+#         result += 'обычное'
+#     print(result)
+######################################################################################
