@@ -167,3 +167,5 @@ for number in prime_numbers_generator(n=10000, func=palindrome_number):
 #         result += 'обычное'
 #     print(result)
 ######################################################################################
+
+# зачет!
