@@ -73,4 +73,74 @@
 #     def run(self):
 #         <обработка данных>
 
-# TODO написать код в однопоточном/однопроцессорном стиле
+import os.path
+# from datetime import datetime
+
+
+def volatility(min, max):
+    half_sum = (max + min) / 2
+    result = ((max - min) / half_sum) * 100
+    return result
+
+
+class TickersParser:
+
+    def __init__(self, subdir=''):
+        self.workdir = os.path.join(os.getcwd(), subdir)
+        self.files = os.listdir(self.workdir)
+        self.tickers = {}
+        self.tickers_volatility = []
+        self.tickers_volatility_0 = []
+        self.file_titles = 'SECID,TRADETIME,PRICE,QUANTITY\n'
+
+    def run(self):
+        for file in self.files:
+            self.parse_file(file)
+        for ticker in self.tickers:
+            self.tickers[ticker].sort()
+            price_min = self.tickers[ticker][0]
+            price_max = self.tickers[ticker][-1]
+            ticker_volatility = volatility(price_min, price_max)
+            if ticker_volatility == 0.0:
+                self.tickers_volatility_0.append(ticker)
+            else:
+                self.tickers_volatility.append((ticker, ticker_volatility))
+        self.tickers_volatility = sorted(self.tickers_volatility, key=lambda x: x[1], reverse=True)
+        self.tickers_volatility_0.sort()
+        self.result()
+
+    def parse_file(self, filename):
+        file_path = os.path.join(self.workdir, filename)
+        with open(file_path, 'r', encoding='utf8') as file:
+            for line in file:
+                if not line == self.file_titles:
+                    self.parse_line(line)
+
+    def parse_line(self, line):
+        # sec_id, time, price, quantity = line.split(',')
+        # time = datetime.strptime(time, '%H:%M:%S').time()
+        # quantity = int(quantity)
+        sec_id = line.split(',')[0]
+        price = float(line.split(',')[2])
+        if sec_id in self.tickers:
+            self.tickers[sec_id].append(price)
+        else:
+            self.tickers[sec_id] = [price]
+
+    def result(self):
+        print('Максимальная волатильность:')
+        for number in range(3):
+            ticker = self.tickers_volatility[number][0]
+            volatility_percent = round(self.tickers_volatility[number][1], 2)
+            print(f'\t{ticker} - {volatility_percent} %')
+        print('Минимальная волатильность:')
+        for number in range(3):
+            ticker = self.tickers_volatility[number - 3][0]
+            volatility_percent = round(self.tickers_volatility[number - 3][1], 2)
+            print(f'\t{ticker} - {volatility_percent} %')
+        print('Нулевая волатильность:')
+        print('\t' + ', '.join(self.tickers_volatility_0))
+
+
+tickers = TickersParser(subdir='trades')
+tickers.run()
