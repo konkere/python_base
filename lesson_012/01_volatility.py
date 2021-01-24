@@ -125,5 +125,6 @@ def main():
 
 
 # AMD 4 core 1.7GHz - Функция работала 11.4104 секунд(ы)
+# Intel 4 cores (8 threads) 3.6GHz base frequency (4.2GHz turbo) - Функция работала 1.5182 секунд(ы)
 if __name__ == '__main__':
     main()
