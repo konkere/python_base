@@ -73,115 +73,56 @@
 #     def run(self):
 #         <обработка данных>
 
-import os.path
-# from datetime import datetime
+from utils import time_track, volatility, result, files_in_dir
 
 
-def volatility(min, max):
-    half_sum = (max + min) / 2
-    result = ((max - min) / half_sum) * 100
-    return result
-
-
-# TODO Давай те сделаем код более читаемым и подготовим его к потокам, разобьем на функции и вынесем в отдельный модуль
-# TODO все сопутствующие инструменты!
-# TODO Создадим модуль утилиты и перенесем в него все дополнительные функции
-# TODO создадим там декоратор из сниппетов наших уроков! Будем чекать время!
 class TickersParser:
 
-    # TODO ВАЖНО главная задача добиться чтобы класс обрабатывал только один билет на валатильность!
-    # TODO на вход получаем путь до файла который будем обрабатывать!
-    def __init__(self, subdir=''):
-        # TODO из параметров у нас будет полный путь до файла!
-        # TODO И еще два параметра это имя билета self.name_ticket = ''
-        # TODO и сама волатильность self.volatility = 0
-        # TODO остальное у нас будет локальными переменными в методах
-        self.workdir = os.path.join(os.getcwd(), subdir)
-        self.files = os.listdir(self.workdir)
-        self.tickers = {}
-        self.tickers_volatility = []
-        self.tickers_volatility_0 = []
+    def __init__(self, file):
+        self.file = file
+        self.name_ticket = ''
+        self.volatility = 0
         self.file_titles = 'SECID,TRADETIME,PRICE,QUANTITY\n'
 
-    # TODO по заданию в методе run который будет запускать нужные нам внутренние методы! их два
-    # TODO метод который открывает файл и читает его возвращая список данных для обработки! Также запоминая имя билета.
-    # TODO метод который обрабатывает данные и получает валатильность!
     def run(self):
-        for file in self.files:
-            self.parse_file(file)
-        for ticker in self.tickers:
-            self.tickers[ticker].sort()
-            price_min = self.tickers[ticker][0]
-            price_max = self.tickers[ticker][-1]
-            ticker_volatility = volatility(price_min, price_max)
-            if ticker_volatility == 0.0:
-                self.tickers_volatility_0.append(ticker)
-            else:
-                self.tickers_volatility.append((ticker, ticker_volatility))
-        self.tickers_volatility = sorted(self.tickers_volatility, key=lambda x: x[1], reverse=True)
-        self.tickers_volatility_0.sort()
-        self.result()
+        price_min, price_max = self.parse_file()
+        self.volatility = volatility(price_min, price_max)
 
-    def parse_file(self, filename):
-        file_path = os.path.join(self.workdir, filename)
-        with open(file_path, 'r', encoding='utf8') as file:
+    def parse_file(self):
+        prices = []
+        with open(self.file, 'r', encoding='utf8') as file:
             for line in file:
                 if not line == self.file_titles:
-                    self.parse_line(line)
+                    price = self.parse_line(line)
+                    prices.append(price)
+        prices.sort()
+        price_min = prices[0]
+        price_max = prices[-1]
+        return price_min, price_max
 
     def parse_line(self, line):
-        # sec_id, time, price, quantity = line.split(',')
-        # time = datetime.strptime(time, '%H:%M:%S').time()
-        # quantity = int(quantity)
-        sec_id = line.split(',')[0]
+        if not self.name_ticket:
+            self.name_ticket = line.split(',')[0]
         price = float(line.split(',')[2])
-        if sec_id in self.tickers:
-            self.tickers[sec_id].append(price)
+        return price
+
+
+@time_track
+def main():
+    tickers = []
+    tickers_volatility = []
+    tickers_volatility_0 = []
+    for file in files_in_dir():
+        tickers.append(TickersParser(file))
+    for ticker in tickers:
+        ticker.run()
+    for ticker in tickers:
+        if ticker.volatility == 0.0:
+            tickers_volatility_0.append(ticker.name_ticket)
         else:
-            self.tickers[sec_id] = [price]
-
-    # TODO это в утилиты
-    def result(self):
-        print('Максимальная волатильность:')
-        for number in range(3):
-            ticker = self.tickers_volatility[number][0]
-            volatility_percent = round(self.tickers_volatility[number][1], 2)
-            print(f'\t{ticker} - {volatility_percent} %')
-        print('Минимальная волатильность:')
-        for number in range(3):
-            ticker = self.tickers_volatility[number - 3][0]
-            volatility_percent = round(self.tickers_volatility[number - 3][1], 2)
-            print(f'\t{ticker} - {volatility_percent} %')
-        print('Нулевая волатильность:')
-        print('\t' + ', '.join(self.tickers_volatility_0))
+            tickers_volatility.append([ticker.name_ticket, ticker.volatility])
+    result(tickers_volatility, tickers_volatility_0)
 
 
-# TODO тут мы напишем функцию main() и обернем ее декоратором time_track
-# TODO в функции main()
-# TODO мы объявим нужные нам словари\списки для работы
-# TODO создадим нужную нам последовательность как раз используя генератор который каждый раз будет
-# TODO возвращать файл который мы будем передавать в экземпляр класса.
-# TODO Создадим список экземпляров класса которым на вход будем передавать каждый раз отдельный новый билет!
-# TODO Циклом пройдемся по Экземплярам из списка который мы создали ранее и запустим метод run()
-# TODO отдельным циклом! Это важно, для дальнейших улучшений!
-# TODO Как только они выполнятся мы будем, так же циклом пройдемся по билетам и
-# TODO и будем чекать валатильность, и заносить ее в нужный словарь!
-# TODO В конце кода вызовем функцию которая сформирует нам результат и напечатает на экран нужные данные!
-
-# TODO в функции main() должно быть три цикла, в первом вы записываете в словарь экземпляры класса
-# TODO во Втором, проходясь по списку с экземплярами класса, запускаете метод .run()
-# TODO в Третьем, вы проходясь по списку с экземплярами класса, получаете параметр volatility и обрабатываете его!
-
-# TODO Функция обработки у вас должна быть реализована в утилитах. В майн только вызываем
-
-tickers = TickersParser(subdir='trades')
-tickers.run()
-
-# TODO тут напишем if __name__ == '__main__':
-# TODO и вы вызовем функции main() в которой у нас будет все логика работы программы!
-
-# TODO Создадим модуль утилиты, в него вынесем все дополнительные функции, такие как принты в консоль,
-# TODO обработку путей до файлов.
-#  Также добавим в утилиты декоратор time_track из прошлых заданий! Чекать время запуска
-
-
+if __name__ == '__main__':
+    main()
