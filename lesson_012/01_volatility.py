@@ -80,7 +80,7 @@ class TickersParser:
 
     def __init__(self, file):
         self.file = file
-        self.name_ticket = ''
+        self.name_ticker = ''
         self.volatility = 0
         self.file_titles = 'SECID,TRADETIME,PRICE,QUANTITY\n'
 
@@ -101,8 +101,8 @@ class TickersParser:
         return price_min, price_max
 
     def parse_line(self, line):
-        if not self.name_ticket:
-            self.name_ticket = line.split(',')[0]
+        if not self.name_ticker:
+            self.name_ticker = line.split(',')[0]
         price = float(line.split(',')[2])
         return price
 
@@ -118,9 +118,9 @@ def main():
         ticker.run()
     for ticker in tickers:
         if ticker.volatility == 0.0:
-            tickers_volatility_0.append(ticker.name_ticket)
+            tickers_volatility_0.append(ticker.name_ticker)
         else:
-            tickers_volatility.append([ticker.name_ticket, ticker.volatility])
+            tickers_volatility.append([ticker.name_ticker, ticker.volatility])
     result(tickers_volatility, tickers_volatility_0)
 
 
