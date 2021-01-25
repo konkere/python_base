@@ -73,5 +73,6 @@ def main():
     result(tickers_volatility, tickers_volatility_0)
 
 
+# AMD 4 core 1.7GHz - Функция работала 11.5159 секунд(ы)
 if __name__ == '__main__':
     main()
