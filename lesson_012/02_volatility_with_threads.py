@@ -27,7 +27,7 @@ class TickersParser(Thread):
     def __init__(self, file, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.file = file
-        self.name_ticket = ''
+        self.name_ticker = ''
         self.volatility = 0
         self.file_titles = 'SECID,TRADETIME,PRICE,QUANTITY\n'
 
@@ -48,8 +48,8 @@ class TickersParser(Thread):
         return price_min, price_max
 
     def parse_line(self, line):
-        if not self.name_ticket:
-            self.name_ticket = line.split(',')[0]
+        if not self.name_ticker:
+            self.name_ticker = line.split(',')[0]
         price = float(line.split(',')[2])
         return price
 
@@ -67,12 +67,13 @@ def main():
         ticker.join()
     for ticker in tickers:
         if ticker.volatility == 0.0:
-            tickers_volatility_0.append(ticker.name_ticket)
+            tickers_volatility_0.append(ticker.name_ticker)
         else:
-            tickers_volatility.append([ticker.name_ticket, ticker.volatility])
+            tickers_volatility.append([ticker.name_ticker, ticker.volatility])
     result(tickers_volatility, tickers_volatility_0)
 
 
 # AMD 4 core 1.7GHz - Функция работала 11.5159 секунд(ы)
+# Intel 4 cores (8 threads) 3.6GHz base frequency (4.2GHz turbo) - Функция работала 1.5506 секунд(ы)
 if __name__ == '__main__':
     main()
