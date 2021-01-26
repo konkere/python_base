@@ -19,6 +19,7 @@
 #
 
 from multiprocessing import Process, Queue
+from queue import Empty
 from utils import time_track, volatility, result, files_in_dir
 
 
@@ -66,22 +67,24 @@ def main():
         tickers.append(TickersParser(file, collector=collector))
     for ticker in tickers:
         ticker.start()
-    # TODO это мы должны перенести после цикла while
+
+    while True:
+        try:
+            data = collector.get(timeout=.01)
+            if data['volatility'] == 0.0:
+                tickers_volatility_0.append(data['ticker'])
+            else:
+                tickers_volatility.append([data['ticker'], data['volatility']])
+        except Empty:
+            if not any(ticker.is_alive() for ticker in tickers):
+                break
+
     for ticker in tickers:
         ticker.join()
-
-    # TODO да переделайте как я просил чтобы ловилось на лету, используйте для отлова Empty из queue
-    while not collector.empty():
-        data = collector.get()
-        if data['volatility'] == 0.0:
-            tickers_volatility_0.append(data['ticker'])
-        else:
-            tickers_volatility.append([data['ticker'], data['volatility']])
-
     result(tickers_volatility, tickers_volatility_0)
 
 
-# Intel 4 cores (8 threads) 3.6GHz base frequency (4.2GHz turbo) - Функция работала 0.5887 секунд(ы)
+# Intel 4 cores (8 threads) 3.6GHz base frequency (4.2GHz turbo) - Функция работала 0.6666 секунд(ы)
 # AMD 4 core 1.7GHz - Функция работала 5.8824 секунд(ы)
 if __name__ == '__main__':
     main()
