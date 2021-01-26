@@ -66,9 +66,11 @@ def main():
         tickers.append(TickersParser(file, collector=collector))
     for ticker in tickers:
         ticker.start()
+    # TODO это мы должны перенести после цикла while
     for ticker in tickers:
         ticker.join()
 
+    # TODO да переделайте как я просил чтобы ловилось на лету, используйте для отлова Empty из queue
     while not collector.empty():
         data = collector.get()
         if data['volatility'] == 0.0:
@@ -80,5 +82,6 @@ def main():
 
 
 # Intel 4 cores (8 threads) 3.6GHz base frequency (4.2GHz turbo) - Функция работала 0.5887 секунд(ы)
+# AMD 4 core 1.7GHz - Функция работала 5.8824 секунд(ы)
 if __name__ == '__main__':
     main()
