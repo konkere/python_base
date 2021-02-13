@@ -55,3 +55,17 @@ if __name__ == '__main__':
 # При написании кода помнить, что заказчик может захотеть доработок и новых возможностей...
 # И, возможно, вам пригодится паттерн проектирования "Состояние",
 #   см https://clck.ru/Fudd8 и https://refactoring.guru/ru/design-patterns/state
+
+
+# TODO сможете в точности применить паттерн состояния для этого задания
+# https://refactoring.guru/ru/design-patterns/state
+
+# TODO первый бросок первое состояние, второй бросок второе.
+
+# TODO в конце функции get_score запустить обработку
+# TODO можно запустить цикл while пока результат context.result_game есть что считать
+# TODO while context.results_game:
+#         context.request1()
+#         context.request2()
+# TODO ретуним уже context.score
+
