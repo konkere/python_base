@@ -15,7 +15,7 @@ async def commands(message: types.Message):
     interlocutor_name = message.from_user["first_name"]
     bot_response = f'{chatter.commands[received_command]}, {interlocutor_name}'
     await message.reply(bot_response)
-    tlgrm_bot_logger.info(f'Полученная команда и ответ бота:\n\t{received_command} → {bot_response}')
+    tlgrm_bot_logger.debug(f'Полученная команда и ответ бота:\n\t{received_command} → {bot_response}')
 
 
 @dp.message_handler(chat_id=chatter.config.chat_id)
@@ -23,7 +23,7 @@ async def echo(message: types.Message):
     received_message = message.text
     bot_response = message.text
     await message.reply(received_message)
-    tlgrm_bot_logger.info(f'Полученное сообщение и ответ бота:\n\t{received_message} → {bot_response}')
+    tlgrm_bot_logger.debug(f'Полученное сообщение и ответ бота:\n\t{received_message} → {bot_response}')
 
 
 if __name__ == "__main__":
