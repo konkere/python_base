@@ -11,6 +11,11 @@ dp = Dispatcher(chatter.bot)
 
 @dp.message_handler(commands=chatter.commands.keys(), chat_id=chatter.config.chat_id)
 async def commands(message: types.Message):
+    """
+    Функия обработки команд бота вида:
+        /command
+        /command@BotUsername
+    """
     received_command = message.text[1:]
     interlocutor_name = message.from_user["first_name"]
     bot_response = f'{chatter.commands[received_command]}, {interlocutor_name}'
@@ -20,6 +25,9 @@ async def commands(message: types.Message):
 
 @dp.message_handler(chat_id=chatter.config.chat_id)
 async def echo(message: types.Message):
+    """
+    Функция "Эхо", отправляющая полученное сообщение обратно
+    """
     received_message = message.text
     bot_response = message.text
     await message.reply(received_message)
