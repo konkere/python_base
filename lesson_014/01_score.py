@@ -32,7 +32,25 @@
 # Скрипт должен принимать параметр --result и печатать на консоль:
 #   Количество очков для результатов ХХХ - УУУ.
 
-# TODO тут ваш код
+import argparse
+from bowling import get_score
+
+
+def args_parser():
+    parser = argparse.ArgumentParser(description='Bowling calculation of game results')
+    parser.add_argument('-r', '--result', type=str, help='Game result', required=True)
+    args = parser.parse_args().__dict__
+    result = args['result']
+    return result
+
+
+if __name__ == '__main__':
+    user_input = args_parser()
+    try:
+        score = get_score(user_input)
+        print(f'Количество очков для результатов [{user_input}] → {score}')
+    except Exception as exc:
+        print(exc)
 
 # При написании кода помнить, что заказчик может захотеть доработок и новых возможностей...
 # И, возможно, вам пригодится паттерн проектирования "Состояние",
