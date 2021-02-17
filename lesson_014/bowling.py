@@ -62,7 +62,7 @@ class Frame:
             if self.points > 10 and number != 0:
                 raise SyntaxError('Ошибка формата фрейма (кеглей не может быть больше 10)')
             elif self.points == 10:
-                self.points = 15
+                raise SyntaxError('Ошибка формата фрейма (not/spare)')
         else:
             raise SyntaxError('Ошибка формата фрейма (неизвестные символы)')
 

@@ -35,6 +35,7 @@ class ToursParser:
             self.file_out = file_out
         else:
             self.file_out = 'tournament_result.txt'
+        self.dummy_winner = 'Нет победителя!'
         self.member_games = defaultdict(int)
         self.member_wins = defaultdict(int)
         self.winners = {}
@@ -58,7 +59,10 @@ class ToursParser:
                 self.member_games[name] += 1
                 members_scores[name] = score
                 tour_block_new[name] = [tour_block[name], score]
-        tour_block_winner = sorter_by_value(members_scores)[0][0]
+        try:
+            tour_block_winner = sorter_by_value(members_scores)[0][0]
+        except IndexError:
+            tour_block_winner = self.dummy_winner
         self.winners[tour] = tour_block_winner
         self.member_wins[tour_block_winner] += 1
         self.tour_blocks[tour] = tour_block_new
@@ -103,6 +107,8 @@ class ToursParser:
                 file.write(line)
 
     def tournament_stat_out(self):
+        if self.dummy_winner in self.member_wins:
+            del self.member_wins[self.dummy_winner]
         print('╔' + '═' * 11 + '╤' + '═' * 16 + '╤' + '═' * 13 + '╗')
         print('║{member:^11}│{games:^16}│{wins:^13}║'.format(member='Игрок',
                                                              games='сыграно матчей',

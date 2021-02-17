@@ -115,12 +115,12 @@ class GetScoreTest(unittest.TestCase):
             get_score('0')
 
     def test_spare_without_slash(self):
-        result = get_score('12121264121212121212')
-        self.assertEqual(result, 42)
+        with self.assertRaises(SyntaxError):
+            get_score('12121264121212121212')
 
     def test_multiple_spares_without_slash(self):
-        result = get_score('12121264128212911237')
-        self.assertEqual(result, 78)
+        with self.assertRaises(SyntaxError):
+            get_score('12121264128212911237')
 
 
 if __name__ == '__main__':
