@@ -29,15 +29,17 @@ def sorter_by_value(block):
 class ToursParser:
 
     def __init__(self, file_in, file_out):
+        self.file_errors = 'tournament_errors.txt'
         self.file_in = file_in
         if file_out:
             self.file_out = file_out
         else:
             self.file_out = 'tournament_result.txt'
-        self.memeber_games = defaultdict(int)
+        self.member_games = defaultdict(int)
         self.member_wins = defaultdict(int)
         self.winners = {}
         self.tour_blocks = {}
+        self.errors = {}
 
     def run(self):
         for tour, tour_block in tours(self.file_in):
@@ -46,20 +48,22 @@ class ToursParser:
     def block_parse(self, tour, tour_block):
         members_scores = {}
         tour_block_new = {}
+        errors = {}
         for name in tour_block:
             try:
                 score = get_score(tour_block[name])
             except SyntaxError:
-                score = 0
-                tour_block[name] = '[Ошибка]'
-            finally:
-                self.memeber_games[name] += 1
+                errors[name] = tour_block[name]
+            else:
+                self.member_games[name] += 1
                 members_scores[name] = score
                 tour_block_new[name] = [tour_block[name], score]
         tour_block_winner = sorter_by_value(members_scores)[0][0]
         self.winners[tour] = tour_block_winner
         self.member_wins[tour_block_winner] += 1
         self.tour_blocks[tour] = tour_block_new
+        if errors:
+            self.errors[tour] = errors
 
     def tournament_result_out(self):
         if os.path.exists(self.file_out):
@@ -79,6 +83,24 @@ class ToursParser:
                 winner = self.winners[tour]
                 line = f'winner is {winner}\n\n'
                 file.write(line)
+        if self.errors:
+            self.tournament_errors_out()
+
+    def tournament_errors_out(self):
+        if os.path.exists(self.file_errors):
+            os.remove(self.file_errors)
+        for tour in self.errors:
+            with open(self.file_errors, mode='a') as file:
+                line = f'### Tour {tour}\n'
+                file.write(line)
+            for name in self.errors[tour]:
+                with open(self.file_errors, mode='a') as file:
+                    err_result = self.errors[tour][name]
+                    line = f'{name}\t{err_result}\n'
+                    file.write(line)
+            with open(self.file_errors, mode='a') as file:
+                line = f'\n'
+                file.write(line)
 
     def tournament_stat_out(self):
         print('╔' + '═' * 11 + '╤' + '═' * 16 + '╤' + '═' * 13 + '╗')
@@ -89,6 +111,6 @@ class ToursParser:
         winners = sorter_by_value(self.member_wins)
         for name, wins in winners:
             print('║{member:^11}│{games:^16}│{wins:^13}║'.format(member=name,
-                                                                 games=self.memeber_games[name],
+                                                                 games=self.member_games[name],
                                                                  wins=wins))
         print('╚' + '═' * 11 + '╧' + '═' * 16 + '╧' + '═' * 13 + '╝')
