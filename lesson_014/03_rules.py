@@ -25,6 +25,22 @@
 
 # "И да, старые правила должны остаться! для внутреннего рынка..." - уточнил менеджер напоследок.
 
-# TODO запуск кода тут
+import argparse
+from tours_parser import ToursParser
 
-# TODO дополнить тесты на новый подсчет
+
+def args_parser():
+    parser = argparse.ArgumentParser(description='Bowling calculation of game results')
+    parser.add_argument('-i', '--input', type=str, help='Файл протокола турнира', required=True)
+    parser.add_argument('-o', '--output', type=str, help='Файл результатов турнира', required=False)
+    parser.add_argument('-r', '--rules', type=str, help='Правила подсчёта очков (inner/outer)', required=False)
+    args = parser.parse_args().__dict__
+    return args
+
+
+if __name__ == '__main__':
+    args = args_parser()
+    game = ToursParser(file_in=args['input'], file_out=args['output'], rules=args['rules'])
+    game.run()
+    game.tournament_result_out()
+    game.tournament_stat_out()

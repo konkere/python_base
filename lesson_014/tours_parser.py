@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-from bowling import get_score
+from bowling import get_score, get_score_outer
 from collections import defaultdict
 
 
@@ -28,7 +28,8 @@ def sorter_by_value(block):
 
 class ToursParser:
 
-    def __init__(self, file_in, file_out):
+    def __init__(self, file_in, file_out, rules='inner'):
+        self.rules = rules
         self.file_errors = 'tournament_errors.txt'
         self.file_in = file_in
         if file_out:
@@ -52,7 +53,7 @@ class ToursParser:
         errors = {}
         for name in tour_block:
             try:
-                score = get_score(tour_block[name])
+                score = self.get_score(tour_block[name])
             except SyntaxError:
                 errors[name] = tour_block[name]
             else:
@@ -68,6 +69,13 @@ class ToursParser:
         self.tour_blocks[tour] = tour_block_new
         if errors:
             self.errors[tour] = errors
+
+    def get_score(self, game_result):
+        if self.rules == 'outer':
+            score = get_score_outer(game_result)
+        else:
+            score = get_score(game_result)
+        return score
 
     def tournament_result_out(self):
         if os.path.exists(self.file_out):
