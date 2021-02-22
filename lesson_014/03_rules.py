@@ -44,3 +44,5 @@ if __name__ == '__main__':
     game.run()
     game.tournament_result_out()
     game.tournament_stat_out()
+
+# зачет!
