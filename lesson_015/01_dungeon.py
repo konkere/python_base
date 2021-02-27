@@ -92,11 +92,195 @@
 #
 # и так далее...
 
+import re
+import csv
+import json
+import os.path
+from datetime import datetime
+from decimal import Decimal, ROUND_HALF_UP
 
 remaining_time = '123456.0987654321'
 # если изначально не писать число в виде строки - теряется точность!
 field_names = ['current_location', 'current_experience', 'current_date']
 
-# TODO тут ваш код
+
+def user_choice(max_number):
+    while True:
+        user_input = input('Выберите действие: ')
+        try:
+            choice = int(user_input)
+        except ValueError:
+            continue
+        if 0 < choice <= max_number:
+            return choice
+
+
+class Dungeon:
+
+    def __init__(self, remaining_time, field_names, locations_data_file, game_out_file):
+        self.locations_data_file = locations_data_file
+        with open(self.locations_data_file, 'r') as file:
+            self.locations_data = json.load(file)
+        self.game_info = []
+        self.locations_data = self.locations_data
+        self.re_location = r'[LH]\w{4,7}_?B?\d*_tm(\d+\.?\d+)'
+        self.re_monster = r'[BM]\w{2,3}\d*?_exp(\d+)_tm(\d+\.?\d*)'
+        self.start_time = Decimal(remaining_time)
+        self.remaining_time = Decimal(remaining_time)
+        self.exp = 0
+        self.field_names = field_names
+        self.game_out_file = game_out_file
+        self.current_location_name = list(self.locations_data)[0]
+        self.current_location = self.locations_data
+        self.main_action_menu = '\t1. Атаковать монстра\n\t2. Перейти в другую локацию\n\t3. Сдаться и выйти из игры'
+
+    def run(self):
+        while True:
+            self.check_status()
+            self.view_current_location()
+
+    def view_current_location(self):
+        print('Внутри вы видите:')
+        for event in self.current_location[self.current_location_name]:
+            text = '\t— Монстра'
+            if isinstance(event, dict):
+                event = list(event)[0]
+                text = '\t— Вход в локацию:'
+            print(text, event)
+        print('Выберите действие:')
+        print(self.main_action_menu)
+        action = user_choice(3)
+        if action == 1:
+            self.attack()
+        elif action == 2:
+            self.move()
+        elif action == 3:
+            self.end('surrender')
+
+    def attack(self):
+        number = 0
+        monsters = []
+        for monster in self.current_location[self.current_location_name]:
+            if isinstance(monster, str):
+                number += 1
+                monsters.append(monster)
+                print(f'\t{number}. {monster}')
+        if number > 0:
+            action = user_choice(number)
+            monster = self.current_location[self.current_location_name].pop(action - 1)
+            exp, time = self.monster_exp_time(monster)
+            self.exp += exp
+            self.remaining_time -= time
+            self.info_collect()
+        else:
+            print('Вокруг не видно монстров.')
+
+    def move(self):
+        number = 0
+        locations = []
+        for location in self.current_location[self.current_location_name]:
+            if isinstance(location, dict):
+                number += 1
+                location = list(location)[0]
+                locations.append(location)
+                print(f'\t{number}. {location}')
+        if number > 0:
+            action = user_choice(number)
+            location = locations[action - 1]
+            for move_to in self.current_location[self.current_location_name]:
+                try:
+                    move_to[location]
+                except (TypeError, KeyError):
+                    continue
+                else:
+                    self.current_location = move_to
+                    self.current_location_name = location
+                    time = self.location_time(location)
+                    self.remaining_time -= time
+                    self.info_collect()
+        else:
+            print('Сожалею, нет локаций для перехода...')
+
+    def location_time(self, location):
+        time = Decimal(re.match(self.re_location, location)[1])
+        return time
+
+    def monster_exp_time(self, monster):
+        exp = int(re.match(self.re_monster, monster)[1])
+        time = Decimal(re.match(self.re_monster, monster)[2])
+        return exp, time
+
+    def check_status(self):
+        if ('Hatch' in self.current_location_name) and (self.exp > 279) and (self.remaining_time > 0):
+            self.end('win')
+        elif self.remaining_time <= 0:
+            print('Вы не успели открыть люк!!! НАВОДНЕНИЕ!!! Алярм!')
+            self.end('death')
+        elif 'Hatch' in self.current_location_name:
+            print('У вас не хватило сил открыть люк. Вы долго пытались... НАВОДНЕНИЕ!!! Алярм!')
+            self.end('death')
+        time = self.start_time - self.remaining_time
+        time = time.quantize(Decimal('1'), ROUND_HALF_UP)
+        time = datetime.utcfromtimestamp(int(time)).strftime('%H:%M:%S')
+        remaining_time = '{:f}'.format(self.remaining_time)
+        print(f'Вы находитесь в {self.current_location_name}')
+        print(f'У вас {self.exp} опыта и осталось {remaining_time} секунд до наводнения')
+        print(f'Прошло времени: {time}')
+
+    def resurrect(self):
+        with open(self.locations_data_file, 'r') as file:
+            self.locations_data = json.load(file)
+        self.current_location = self.locations_data
+        self.current_location_name = list(self.locations_data)[0]
+        self.remaining_time = self.start_time
+        self.exp = 0
+        self.info_collect()
+
+    def end(self, status):
+        if status == 'win':
+            print(self.current_location[self.current_location_name])
+            self.info_save()
+            exit(0)
+        elif status == 'surrender':
+            print('Очень жаль. До новых встреч!')
+            self.info_save()
+            exit(0)
+        elif status == 'death':
+            print(
+                f'У вас темнеет в глазах... прощай, принцесса...\n'
+                f'Но что это?! Вы воскресли у входа в пещеру... Не зря матушка дала вам оберег :)\n'
+                f'Ну, на этот-то раз у вас все получится! Трепещите, монстры!\n'
+                f'Вы осторожно входите в пещеру...\n'
+            )
+            self.resurrect()
+
+    def info_collect(self):
+        current_date_and_time = str(datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
+        self.game_info.append([
+            {
+                'current_location': self.current_location_name,
+                'current_experience': self.exp,
+                'current_date': current_date_and_time
+            }
+        ])
+
+    def info_save(self):
+        if os.path.exists(self.game_out_file):
+            os.remove(self.game_out_file)
+        with open(self.game_out_file, 'w', newline='') as out_csv:
+            writer = csv.DictWriter(out_csv, delimiter=',', fieldnames=self.field_names)
+            writer.writeheader()
+            for line in self.game_info:
+                writer.writerows(line)
+
+
+if __name__ == '__main__':
+    game = Dungeon(
+        remaining_time=remaining_time,
+        field_names=field_names,
+        locations_data_file='rpg.json',
+        game_out_file='dungeon.csv'
+    )
+    game.run()
 
 # Учитывая время и опыт, не забывайте о точности вычислений!
